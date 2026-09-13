@@ -35,20 +35,55 @@
                         </div>
                         <span class="text-green-500 bg-green-50 px-2 py-1 rounded-lg text-xs font-bold">+12%</span>
                     </div>
-                    <p class="text-slate-500 text-sm font-medium">Commandes du jour</p>
-                    <h3 class="text-2xl font-bold text-slate-800">48</h3>
+                    <p class="text-slate-500 text-sm font-medium">
+                        Commandes du jour
+                    </p>
+
+                    <h3 class="text-2xl font-bold text-slate-800">
+                        {{ $todayOrders }}
+                    </h3>
+
                 </div>
                 <!-- Vous pouvez ajouter d'autres cartes ici -->
             </div>
 
             <!-- Table illustrative -->
+
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="p-6 border-b border-slate-100 font-bold text-slate-800">Derniers Produits Ajoutés</div>
-                <div class="p-12 text-center text-slate-400">
-                    <i data-lucide="package-search" class="w-12 h-12 mx-auto mb-4 opacity-20"></i>
-                    <p>Contenu du tableau de bord prêt pour vos données.</p>
+
+                <div class="p-6 border-b border-slate-100 font-bold text-slate-800">
+                    Derniers Produits Ajoutés
                 </div>
+
+                @forelse ($products as $product)
+                    <div class="flex items-center justify-between p-6 border-b border-slate-100">
+                        <div>
+                            <h3 class="font-semibold text-slate-800">
+                                {{ $product->name }}
+                            </h3>
+
+                            <p class="text-sm text-slate-500">
+                                {{ $product->sku }}
+                            </p>
+                        </div>
+
+                        <span class="font-semibold">
+                            {{ $product->price }} DH
+                        </span>
+                    </div>
+
+                @empty
+
+                    <div class="p-12 text-center text-slate-400">
+                        <i data-lucide="package-search" class="w-12 h-12 mx-auto mb-4 opacity-20"></i>
+
+                        <p>Aucun produit ajouté pour le moment.</p>
+                    </div>
+                @endforelse
+
             </div>
+
+
         </main>
     </div>
 </x-layout>

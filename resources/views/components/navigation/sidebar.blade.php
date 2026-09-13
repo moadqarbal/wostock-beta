@@ -15,7 +15,7 @@
     <!-- Navigation -->
     <nav class="flex-grow mt-4 px-4 space-y-1 overflow-y-auto custom-scrollbar">
 
-        <a href="#"
+        <a href="{{ route('dashboard.index') }}"
             class="flex items-center gap-3 px-4 py-3 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-900/20">
             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
             <span class="font-medium">Tableau de bord</span>
@@ -38,10 +38,10 @@
                 <i data-lucide="chevron-down" id="icon-produits" class="w-4 h-4 rotate-icon"></i>
             </button>
             <div id="menu-produits" class="submenu pl-10 space-y-1">
+                <a href="{{ route('products.index') }}"
+                    class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste des produits</a>
                 <a href="/products/add-product.php"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Ajouter un produit</a>
-                <a href="/products/list-product.php"
-                    class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste des produits</a>
                 <a href="/products/categories-product.php"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Catégories</a>
             </div>

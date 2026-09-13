@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +22,9 @@ Route::get('/reset-password/{token}', [PasswordController::class, 'reset'])->nam
 Route::post('/reset-password', [PasswordController::class, 'update'])->name('password.update')->middleware('guest');
 
 
-// Settings
+// Dashboard
 Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index')->middleware('auth');
+
+
+// Products
+Route::get('/products' , [ProductController::class , 'index'])->name('products.index')->middleware('auth');

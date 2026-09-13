@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
-
             $table->foreignId('supplier_id')->constrained('suppliers')->restrictOnDelete();
 
             $table->string('name');
