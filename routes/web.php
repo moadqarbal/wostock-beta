@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +32,19 @@ Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index'
 
 // Products
 Route::get('/products' , [ProductController::class , 'index'])->name('products.index')->middleware('auth');
+
+
+// Categories
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index')->middleware('auth'); 
+
+
+// Clients
+Route::get('/clients', [ClientController::class, 'index'])->name('clients.index')->middleware('auth');
+
+
+// Suppliers
+Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index')->middleware('auth');
+
+
+// Orders
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware('auth'); 

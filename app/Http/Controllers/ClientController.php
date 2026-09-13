@@ -12,7 +12,24 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        $query = Client::withCount('orders');
+
+        // Search
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%");
+            });
+        }
+
+        $clients = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('clients.index', compact('clients'));
     }
 
     /**

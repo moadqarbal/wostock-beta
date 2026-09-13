@@ -10,9 +10,25 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Category::withCount('products');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $categories = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('categories.index', compact('categories'));
     }
 
     /**

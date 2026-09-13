@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
 use App\Models\Order;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -14,11 +13,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->take(5)->get();
+        $orders = Order::latest()->take(5)->get();
 
         $todayOrders = Order::whereDate('created_at', today())->count();
 
-        return view('dashboard.index', compact('products' , 'todayOrders'));
+        return view('dashboard.index', compact('orders' , 'todayOrders'));
     }
 
     /**

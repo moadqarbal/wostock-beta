@@ -9,4 +9,16 @@ class Client extends Model
 {
     /** @use HasFactory<\Database\Factories\ClientFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'phone',
+        'email',
+        'address',
+    ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

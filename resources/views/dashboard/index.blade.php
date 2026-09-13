@@ -52,23 +52,23 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
 
                 <div class="p-6 border-b border-slate-100 font-bold text-slate-800">
-                    Derniers Produits Ajoutés
+                    Dernières Commandes Passées
                 </div>
 
-                @forelse ($products as $product)
+                @forelse ($orders as $orders)
                     <div class="flex items-center justify-between p-6 border-b border-slate-100">
                         <div>
                             <h3 class="font-semibold text-slate-800">
-                                {{ $product->name }}
+                                {{ $orders->order_number }}
                             </h3>
 
                             <p class="text-sm text-slate-500">
-                                {{ $product->sku }}
+                                {{ $orders->status }}
                             </p>
                         </div>
 
                         <span class="font-semibold">
-                            {{ $product->price }} DH
+                            {{ $orders->total_amount }} DH
                         </span>
                     </div>
 

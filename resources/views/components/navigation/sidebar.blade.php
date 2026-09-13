@@ -42,7 +42,7 @@
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste des produits</a>
                 <a href="/products/add-product.php"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Ajouter un produit</a>
-                <a href="/products/categories-product.php"
+                <a href="{{ route('categories.index') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Catégories</a>
             </div>
         </div>
@@ -58,10 +58,11 @@
                 <i data-lucide="chevron-down" id="icon-fourn" class="w-4 h-4 rotate-icon"></i>
             </button>
             <div id="menu-fourn" class="submenu pl-10 space-y-1">
+                <a href="{{ route('suppliers.index') }}"
+                    class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste fournisseurs</a>
                 <a href="/suppliers/add-supplier.php"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Ajouter fournisseur</a>
-                <a href="/suppliers/list-supplier.php"
-                    class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste fournisseurs</a>
+                
             </div>
         </div>
 
@@ -76,10 +77,11 @@
                 <i data-lucide="chevron-down" id="icon-clients" class="w-4 h-4 rotate-icon"></i>
             </button>
             <div id="menu-clients" class="submenu pl-10 space-y-1">
+                <a href="{{ route('clients.index') }}" class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste
+                    des clients</a>
                 <a href="/clients/add-client.php"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Ajouter un client</a>
-                <a href="/clients/list-client.php" class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste
-                    des clients</a>
+
             </div>
         </div>
 
@@ -94,10 +96,11 @@
                 <i data-lucide="chevron-down" id="icon-commandes" class="w-4 h-4 rotate-icon"></i>
             </button>
             <div id="menu-commandes" class="submenu pl-10 space-y-1">
+                <a href="{{ route('orders.index') }}"
+                    class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Historique</a>
                 <a href="/orders/add-order.php" class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Nouvelle
                     commande</a>
-                <a href="/orders/list-order.php"
-                    class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Historique</a>
+                
             </div>
         </div>
 
