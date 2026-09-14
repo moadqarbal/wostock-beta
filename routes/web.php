@@ -28,6 +28,7 @@ Route::post('/reset-password', [PasswordController::class, 'update'])->name('pas
 
 // Dashboard
 Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index')->middleware('auth');
+Route::get('/analytics' , [DashboardController::class , 'analytics'])->name('dashboard.analytics')->middleware('auth');
 
 
 // Products

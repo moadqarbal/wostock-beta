@@ -21,7 +21,7 @@
             <span class="font-medium">Tableau de bord</span>
         </a>
 
-        <a href="/settings/analysis.php"
+        <a href="{{ route('dashboard.analytics') }}"
             class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
             <i data-lucide="line-chart" class="w-5 h-5"></i>
             <span class="font-medium">Analyses</span>
