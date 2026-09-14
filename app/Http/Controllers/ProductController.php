@@ -12,7 +12,48 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $query = Product::with(['category', 'supplier']);
+
+        // Search
+        $search = request('search');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhereHas('supplier', function ($q) use ($search) {
+                        $q->where('company_name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Stock filter
+        $stock = request('stock');
+
+        if ($stock === 'disponible') {
+            $query->where('stock_quantity', '>', 0);
+        }
+
+        if ($stock === 'faible') {
+            $query->where('stock_quantity', '>', 0)
+                ->whereColumn(
+                    'stock_quantity',
+                    '<=',
+                    'minimum_stock'
+                );
+        }
+
+        if ($stock === 'rupture') {
+            $query->where('stock_quantity', 0);
+        }
+
+        // Pagination
+        $products = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('products.index', compact('products'));
     }
 
     /**

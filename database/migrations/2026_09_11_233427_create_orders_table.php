@@ -21,20 +21,20 @@ return new class extends Migration
             $table->string('order_number')->unique();
 
             $table->enum('source', [
-                'manual',
+                'manuelle',
                 'whatsapp',
-                'website',
+                'site_web',
                 'woocommerce',
-            ])->default('manual');
+            ])->default('manuelle');
 
             $table->enum('status', [
-                'pending',
-                'confirmed',
-                'shipped',
-                'delivered',
-                'cancelled',
-                'returned',
-            ])->default('pending');
+                'En attente',
+                'Confirmée',
+                'Expédiée',
+                'Livrée',
+                'Annulée',
+                'Retournée',
+            ])->default('En attente');
 
             $table->decimal('subtotal', 12, 2)->default(0);
             $table->decimal('shipping_cost', 12, 2)->default(0);

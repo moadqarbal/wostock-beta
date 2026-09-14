@@ -12,7 +12,24 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $query = Supplier::withCount('products');
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('company_name', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%");
+            });
+        }
+
+        $suppliers = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('suppliers.index', compact('suppliers'));
     }
 
     /**
