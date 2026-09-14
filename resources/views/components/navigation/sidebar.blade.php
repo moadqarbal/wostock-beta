@@ -79,7 +79,7 @@
             <div id="menu-clients" class="submenu pl-10 space-y-1">
                 <a href="{{ route('clients.index') }}" class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste
                     des clients</a>
-                <a href="/clients/add-client.php"
+                <a href="{{ route('clients.create') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Ajouter un client</a>
 
             </div>
