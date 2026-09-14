@@ -41,6 +41,12 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 
 // Clients
 Route::get('/clients', [ClientController::class, 'index'])->name('clients.index')->middleware('auth');
+Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create')->middleware('auth');
+Route::post('/clients', [ClientController::class, 'store'])->name('clients.store')->middleware('auth');
+Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show')->middleware('auth');
+Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clients.update');
+Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
 
 // Suppliers

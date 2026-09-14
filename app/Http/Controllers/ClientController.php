@@ -37,7 +37,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        return view('clients.create');
     }
 
     /**
@@ -45,7 +45,16 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:255|unique:clients,phone',
+            'email' => 'nullable|email|max:255|unique:clients,email',
+            'address' => 'nullable|string',
+        ]);
+
+        Client::create($validated);
+
+        return to_route('clients.index')->with('success', 'Le client a été ajouté à votre liste de clients.');
     }
 
     /**
@@ -53,7 +62,9 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        $client->load('orders');
+
+        return view('clients.show', compact('client'));
     }
 
     /**
@@ -61,15 +72,21 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        //
+        return view('clients.edit', compact('client'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Client $client)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:255|unique:clients,phone,' . $client->id,
+            'email' => 'nullable|email|max:255|unique:clients,email,' . $client->id,
+            'address' => 'nullable|string',
+        ]);
+
+        $client->update($validated);
+
+        return to_route('clients.show', $client)->with('success', 'Les informations du client ont été mises à jour avec succès.');
     }
 
     /**
@@ -77,6 +94,14 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        if ($client->orders()->exists()) {
+            return to_route('clients.index')
+                ->with('error', 'Impossible de supprimer ce client car il possède des commandes.');
+        }
+
+        $client->delete();
+
+        return to_route('clients.index')
+            ->with('success', 'Le client a été supprimé avec succès.');
     }
 }
