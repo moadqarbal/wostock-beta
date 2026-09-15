@@ -51,6 +51,12 @@ Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('
 
 // Suppliers
 Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index')->middleware('auth');
+Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create')->middleware('auth');
+Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store')->middleware('auth');
+Route::get('/suppliers/{supplier}', [SupplierController::class, 'show'])->name('suppliers.show')->middleware('auth');
+Route::get('/suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
+Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
+Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
 
 
 // Orders

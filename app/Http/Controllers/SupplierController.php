@@ -37,15 +37,26 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('suppliers.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255|unique:suppliers,email',
+            'address' => 'nullable|string',
+            'city' => 'nullable|string|max:255',
+            'postal_code' => 'nullable|string|max:255',
+            'country' => 'required|string|max:255',
+            'notes' => 'nullable|string',
+        ]);
+
+        Supplier::create($validated);
+
+        return to_route('suppliers.index')
+            ->with('success', 'Le fournisseur a été ajouté avec succès.');
     }
 
     /**
@@ -53,7 +64,9 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        $supplier->load('products');
+
+        return view('suppliers.show', compact('supplier'));
     }
 
     /**
@@ -61,15 +74,26 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        //
+        return view('suppliers.edit', compact('supplier'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255|unique:suppliers,email,' . $supplier->id,
+            'address' => 'nullable|string',
+            'city' => 'nullable|string|max:255',
+            'postal_code' => 'nullable|string|max:255',
+            'country' => 'required|string|max:255',
+            'notes' => 'nullable|string',
+        ]);
+
+        $supplier->update($validated);
+
+        return to_route('suppliers.show', $supplier)
+            ->with('success', 'Les informations du fournisseur ont été mises à jour avec succès.');
     }
 
     /**
@@ -77,6 +101,17 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        if ($supplier->products()->exists()) {
+            return to_route('suppliers.index')
+                ->with(
+                    'error',
+                    'Impossible de supprimer ce fournisseur car il possède des produits.'
+                );
+        }
+
+        $supplier->delete();
+
+        return to_route('suppliers.index')
+            ->with('success', 'Le fournisseur a été supprimé avec succès.');
     }
 }
