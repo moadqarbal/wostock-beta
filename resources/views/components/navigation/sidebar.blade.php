@@ -60,7 +60,7 @@
             <div id="menu-fourn" class="submenu pl-10 space-y-1">
                 <a href="{{ route('suppliers.index') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste fournisseurs</a>
-                <a href="/suppliers/add-supplier.php"
+                <a href="{{ route('suppliers.create') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Ajouter fournisseur</a>
                 
             </div>
