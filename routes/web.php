@@ -37,6 +37,12 @@ Route::get('/products' , [ProductController::class , 'index'])->name('products.i
 
 // Categories
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index')->middleware('auth'); 
+Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create')->middleware('auth');
+Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store')->middleware('auth');
+Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit')->middleware('auth');
+Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update')->middleware('auth');
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy')->middleware('auth');
+
 
 
 // Clients
@@ -44,9 +50,9 @@ Route::get('/clients', [ClientController::class, 'index'])->name('clients.index'
 Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create')->middleware('auth');
 Route::post('/clients', [ClientController::class, 'store'])->name('clients.store')->middleware('auth');
 Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show')->middleware('auth');
-Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
-Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clients.update');
-Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
+Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit')->middleware('auth');
+Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clients.update')->middleware('auth');
+Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy')->middleware('auth');
 
 
 // Suppliers
@@ -54,9 +60,9 @@ Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.
 Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create')->middleware('auth');
 Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store')->middleware('auth');
 Route::get('/suppliers/{supplier}', [SupplierController::class, 'show'])->name('suppliers.show')->middleware('auth');
-Route::get('/suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
-Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
-Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+Route::get('/suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit')->middleware('auth');
+Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update')->middleware('auth');
+Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy')->middleware('auth');
 
 
 // Orders

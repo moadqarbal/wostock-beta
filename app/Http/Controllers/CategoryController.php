@@ -36,15 +36,20 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Category::create($validated);
+
+        return to_route('categories.index')
+            ->with('success', 'La catégorie a été ajoutée avec succès.');
     }
 
     /**
@@ -60,7 +65,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.edit', compact('category'));
     }
 
     /**
@@ -68,7 +73,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $category->update($validated);
+
+        return to_route('categories.index')
+            ->with('success', 'La catégorie a été mise à jour avec succès.');
     }
 
     /**
@@ -76,6 +89,20 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        if ($category->products()->exists()) {
+            return to_route('categories.index')
+                ->with(
+                    'error',
+                    'Impossible de supprimer cette catégorie car elle possède des produits.'
+                );
+        }
+
+        $category->delete();
+
+        return to_route('categories.index')
+            ->with(
+                'success',
+                'La catégorie a été supprimée avec succès.'
+            );
     }
 }
