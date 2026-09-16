@@ -13,10 +13,8 @@
                         Suivez et gérez l'état de vos ventes en temps réel.
                     </p>
                 </div>
-                <a
-                    href="#"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all"
-                >
+                <a href="{{ route('orders.create') }}"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     Nouvelle commande
                 </a>
@@ -35,10 +33,7 @@
                             </p>
                         </div>
                         <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center">
-                            <i
-                                data-lucide="clock"
-                                class="w-5 h-5 text-amber-600"
-                            ></i>
+                            <i data-lucide="clock" class="w-5 h-5 text-amber-600"></i>
                         </div>
                     </div>
                 </div>
@@ -54,10 +49,7 @@
                             </p>
                         </div>
                         <div class="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center">
-                            <i
-                                data-lucide="truck"
-                                class="w-5 h-5 text-indigo-600"
-                            ></i>
+                            <i data-lucide="truck" class="w-5 h-5 text-indigo-600"></i>
                         </div>
                     </div>
                 </div>
@@ -73,10 +65,7 @@
                             </p>
                         </div>
                         <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
-                            <i
-                                data-lucide="banknote"
-                                class="w-5 h-5 text-emerald-600"
-                            ></i>
+                            <i data-lucide="banknote" class="w-5 h-5 text-emerald-600"></i>
                         </div>
                     </div>
                 </div>
@@ -92,123 +81,68 @@
                             </p>
                         </div>
                         <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
-                            <i
-                                data-lucide="check-circle"
-                                class="w-5 h-5 text-emerald-600"
-                            ></i>
+                            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>
                         </div>
                     </div>
                 </div>
             </div>
             {{-- Search & Filters --}}
             <div
-                class="bg-white border border-slate-200 rounded-t-2xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center"
-            >
+                class="bg-white border border-slate-200 rounded-t-2xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
                 {{-- Search --}}
                 <div class="relative w-full md:w-96">
-                    <i
-                        data-lucide="search"
-                        class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
-                    ></i>
-                    <input
-                        type="text"
-                        id="orderSearch"
-                        name="search"
-                        value="{{ request('search') }}"
-                        placeholder="N° commande ou client..."
-                        autocomplete="off"
-                        class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition-all bg-slate-50/50"
-                    >
-                    <button
-                        type="button"
-                        id="clearSearch"
-                        class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    >
-                        <i
-                            data-lucide="x"
-                            class="w-4 h-4"
-                        ></i>
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                    <input type="text" id="orderSearch" name="search" value="{{ request('search') }}"
+                        placeholder="N° commande ou client..." autocomplete="off"
+                        class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition-all bg-slate-50/50">
+                    <button type="button" id="clearSearch"
+                        class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
                 {{-- Filters --}}
                 <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
                     {{-- Status --}}
-                    <select
-                        id="statusFilter"
-                        name="status"
-                        class="w-full sm:w-auto bg-white border border-slate-200 text-slate-600 text-sm rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
-                    >
+                    <select id="statusFilter" name="status"
+                        class="w-full sm:w-auto bg-white border border-slate-200 text-slate-600 text-sm rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="">
                             Tous les statuts
                         </option>
-                        <option
-                            value="En attente"
-                            {{ request('status') === 'En attente' ? 'selected' : '' }}
-                        >
+                        <option value="En attente" {{ request('status') === 'En attente' ? 'selected' : '' }}>
                             En attente
                         </option>
-                        <option
-                            value="Confirmée"
-                            {{ request('status') === 'Confirmée' ? 'selected' : '' }}
-                        >
+                        <option value="Confirmée" {{ request('status') === 'Confirmée' ? 'selected' : '' }}>
                             Confirmée
                         </option>
-                        <option
-                            value="Expédiée"
-                            {{ request('status') === 'Expédiée' ? 'selected' : '' }}
-                        >
+                        <option value="Expédiée" {{ request('status') === 'Expédiée' ? 'selected' : '' }}>
                             Expédiée
                         </option>
-                        <option
-                            value="Livrée"
-                            {{ request('status') === 'Livrée' ? 'selected' : '' }}
-                        >
+                        <option value="Livrée" {{ request('status') === 'Livrée' ? 'selected' : '' }}>
                             Livrée
                         </option>
-                        <option
-                            value="Annulée"
-                            {{ request('status') === 'Annulée' ? 'selected' : '' }}
-                        >
+                        <option value="Annulée" {{ request('status') === 'Annulée' ? 'selected' : '' }}>
                             Annulée
                         </option>
-                        <option
-                            value="Retournée"
-                            {{ request('status') === 'Retournée' ? 'selected' : '' }}
-                        >
+                        <option value="Retournée" {{ request('status') === 'Retournée' ? 'selected' : '' }}>
                             Retournée
                         </option>
                     </select>
                     {{-- Source --}}
-                    <select
-                        id="sourceFilter"
-                        name="source"
-                        class="w-full sm:w-auto bg-white border border-slate-200 text-slate-600 text-sm rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
-                    >
+                    <select id="sourceFilter" name="source"
+                        class="w-full sm:w-auto bg-white border border-slate-200 text-slate-600 text-sm rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="">
                             Toutes les sources
                         </option>
-                        <option
-                            value="manuelle"
-                            {{ request('source') === 'manuelle' ? 'selected' : '' }}
-                        >
+                        <option value="manuelle" {{ request('source') === 'manuelle' ? 'selected' : '' }}>
                             Manuelle
                         </option>
-                        <option
-                            value="whatsapp"
-                            {{ request('source') === 'whatsapp' ? 'selected' : '' }}
-                        >
+                        <option value="whatsapp" {{ request('source') === 'whatsapp' ? 'selected' : '' }}>
                             WhatsApp
                         </option>
-                        <option
-                            value="site_web"
-                            {{ request('source') === 'site_web' ? 'selected' : '' }}
-                        >
+                        <option value="site_web" {{ request('source') === 'site_web' ? 'selected' : '' }}>
                             Site web
                         </option>
-                        <option
-                            value="woocommerce"
-                            {{ request('source') === 'woocommerce' ? 'selected' : '' }}
-                        >
+                        <option value="woocommerce" {{ request('source') === 'woocommerce' ? 'selected' : '' }}>
                             WooCommerce
                         </option>
                     </select>
@@ -318,12 +252,9 @@
                                             ];
                                         @endphp
                                         <span
-                                            class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg text-xs font-semibold {{ $sourceClasses[$order->source] ?? 'bg-slate-100 text-slate-600' }}"
-                                        >
-                                            <i
-                                                data-lucide="{{ $sourceIcons[$order->source] ?? 'file-text' }}"
-                                                class="w-3.5 h-3.5"
-                                            ></i>
+                                            class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg text-xs font-semibold {{ $sourceClasses[$order->source] ?? 'bg-slate-100 text-slate-600' }}">
+                                            <i data-lucide="{{ $sourceIcons[$order->source] ?? 'file-text' }}"
+                                                class="w-3.5 h-3.5"></i>
                                             {{ $sourceLabels[$order->source] ?? $order->source }}
                                         </span>
                                     </td>
@@ -362,12 +293,9 @@
                                             ];
                                         @endphp
                                         <span
-                                            class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg text-xs font-semibold {{ $statusClasses[$order->status] ?? 'bg-slate-100 text-slate-600' }}"
-                                        >
-                                            <i
-                                                data-lucide="{{ $statusIcons[$order->status] ?? 'circle' }}"
-                                                class="w-3.5 h-3.5"
-                                            ></i>
+                                            class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg text-xs font-semibold {{ $statusClasses[$order->status] ?? 'bg-slate-100 text-slate-600' }}">
+                                            <i data-lucide="{{ $statusIcons[$order->status] ?? 'circle' }}"
+                                                class="w-3.5 h-3.5"></i>
                                             {{ $statusLabels[$order->status] ?? $order->status }}
                                         </span>
                                     </td>
@@ -375,44 +303,24 @@
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-2">
                                             {{-- View --}}
-                                            <a
-                                                href="#"
-                                                title="Voir"
-                                                class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
-                                            >
-                                                <i
-                                                    data-lucide="eye"
-                                                    class="w-4 h-4"
-                                                ></i>
+                                            <a href="{{ route('orders.show', $order) }}" title="Voir"
+                                                class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
                                             </a>
                                             {{-- Edit --}}
-                                            <a
-                                                href="#"
-                                                title="Modifier"
-                                                class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
-                                            >
-                                                <i
-                                                    data-lucide="pencil"
-                                                    class="w-4 h-4"
-                                                ></i>
+                                            <a href="{{ route('orders.edit', $order) }}" title="Modifier"
+                                                class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+                                                <i data-lucide="pencil" class="w-4 h-4"></i>
                                             </a>
                                             {{-- Delete --}}
-                                            <form
-                                                action="#"
-                                                method="POST"
-                                            >
+                                            <form action="{{ route('orders.destroy', $order) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button
-                                                    type="submit"
-                                                    title="Supprimer"
+
+                                                <button type="submit" title="Supprimer"
                                                     onclick="return confirm('Voulez-vous vraiment supprimer cette commande ?')"
-                                                    class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all"
-                                                >
-                                                    <i
-                                                        data-lucide="trash-2"
-                                                        class="w-4 h-4"
-                                                    ></i>
+                                                    class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all">
+                                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -420,18 +328,11 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td
-                                        colspan="7"
-                                        class="px-6 py-16 text-center"
-                                    >
+                                    <td colspan="7" class="px-6 py-16 text-center">
                                         <div class="flex flex-col items-center justify-center">
                                             <div
-                                                class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mb-4"
-                                            >
-                                                <i
-                                                    data-lucide="shopping-bag"
-                                                    class="w-7 h-7 text-slate-400"
-                                                ></i>
+                                                class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+                                                <i data-lucide="shopping-bag" class="w-7 h-7 text-slate-400"></i>
                                             </div>
                                             <h3 class="font-semibold text-slate-700">
                                                 Aucune commande trouvée
@@ -448,13 +349,9 @@
                 </div>
                 {{-- Footer --}}
                 <div
-                    class="p-4 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-                >
+                    class="p-4 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     {{-- Results Count --}}
-                    <p
-                        data-results-count
-                        class="text-sm text-slate-500"
-                    >
+                    <p data-results-count class="text-sm text-slate-500">
                         Affichage de
                         @if ($orders->total() > 0)
                             <span class="font-bold text-slate-800">
@@ -472,31 +369,18 @@
                         commandes
                     </p>
                     {{-- Pagination --}}
-                    <div
-                        data-pagination
-                        class="flex items-center gap-1"
-                    >
+                    <div data-pagination class="flex items-center gap-1">
                         @if ($orders->hasPages())
                             {{-- Previous --}}
                             @if ($orders->onFirstPage())
                                 <span
-                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-300"
-                                >
-                                    <i
-                                        data-lucide="chevron-left"
-                                        class="w-4 h-4"
-                                    ></i>
+                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-300">
+                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
                                 </span>
                             @else
-                                <a
-                                    href="{{ $orders->previousPageUrl() }}"
-                                    data-pagination-link
-                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition-all"
-                                >
-                                    <i
-                                        data-lucide="chevron-left"
-                                        class="w-4 h-4"
-                                    ></i>
+                                <a href="{{ $orders->previousPageUrl() }}" data-pagination-link
+                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition-all">
+                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
                                 </a>
                             @endif
                             {{-- Page Numbers --}}
@@ -506,15 +390,7 @@
                                 if ($lastPage <= 7) {
                                     $pages = range(1, $lastPage);
                                 } elseif ($currentPage <= 4) {
-                                    $pages = [
-                                        1,
-                                        2,
-                                        3,
-                                        4,
-                                        5,
-                                        '...',
-                                        $lastPage
-                                    ];
+                                    $pages = [1, 2, 3, 4, 5, '...', $lastPage];
                                 } elseif ($currentPage >= $lastPage - 3) {
                                     $pages = [
                                         1,
@@ -523,7 +399,7 @@
                                         $lastPage - 3,
                                         $lastPage - 2,
                                         $lastPage - 1,
-                                        $lastPage
+                                        $lastPage,
                                     ];
                                 } else {
                                     $pages = [
@@ -533,53 +409,37 @@
                                         $currentPage,
                                         $currentPage + 1,
                                         '...',
-                                        $lastPage
+                                        $lastPage,
                                     ];
                                 }
                             @endphp
                             @foreach ($pages as $page)
                                 @if ($page === '...')
-                                    <span
-                                        class="w-9 h-9 flex items-center justify-center text-slate-400 text-sm"
-                                    >
+                                    <span class="w-9 h-9 flex items-center justify-center text-slate-400 text-sm">
                                         ...
                                     </span>
                                 @elseif ($page == $currentPage)
                                     <span
-                                        class="w-9 h-9 flex items-center justify-center rounded-lg bg-indigo-600 text-white text-sm font-semibold shadow-sm"
-                                    >
+                                        class="w-9 h-9 flex items-center justify-center rounded-lg bg-indigo-600 text-white text-sm font-semibold shadow-sm">
                                         {{ $page }}
                                     </span>
                                 @else
-                                    <a
-                                        href="{{ $orders->url($page) }}"
-                                        data-pagination-link
-                                        class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 text-sm hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition-all"
-                                    >
+                                    <a href="{{ $orders->url($page) }}" data-pagination-link
+                                        class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 text-sm hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition-all">
                                         {{ $page }}
                                     </a>
                                 @endif
                             @endforeach
                             {{-- Next --}}
                             @if ($orders->hasMorePages())
-                                <a
-                                    href="{{ $orders->nextPageUrl() }}"
-                                    data-pagination-link
-                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition-all"
-                                >
-                                    <i
-                                        data-lucide="chevron-right"
-                                        class="w-4 h-4"
-                                    ></i>
+                                <a href="{{ $orders->nextPageUrl() }}" data-pagination-link
+                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition-all">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
                                 </a>
                             @else
                                 <span
-                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-300"
-                                >
-                                    <i
-                                        data-lucide="chevron-right"
-                                        class="w-4 h-4"
-                                    ></i>
+                                    class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-300">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
                                 </span>
                             @endif
                         @endif
@@ -590,7 +450,7 @@
     </div>
     {{-- AJAX Search + Filters + Pagination --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const searchInput =
                 document.getElementById('orderSearch');
             const clearSearch =
@@ -610,6 +470,7 @@
                     lucide.createIcons();
                 }
             }
+
             function updateClearButton() {
                 if (searchInput.value.trim() === '') {
                     clearSearch.classList.add('hidden');
@@ -665,130 +526,127 @@
                 keepFocus = false
             ) {
                 fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With':
-                            'XMLHttpRequest',
-                        'Accept':
-                            'text/html'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(
-                            'HTTP error ' +
-                            response.status
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'text/html'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(
+                                'HTTP error ' +
+                                response.status
+                            );
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        const parser =
+                            new DOMParser();
+                        const doc =
+                            parser.parseFromString(
+                                html,
+                                'text/html'
+                            );
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Replace Table Body
+                        |--------------------------------------------------------------------------
+                        */
+                        const newTableBody =
+                            doc.querySelector(
+                                'table tbody'
+                            );
+                        const currentTableBody =
+                            document.querySelector(
+                                'table tbody'
+                            );
+                        if (
+                            newTableBody &&
+                            currentTableBody
+                        ) {
+                            currentTableBody.innerHTML =
+                                newTableBody.innerHTML;
+                        }
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Replace Results Count
+                        |--------------------------------------------------------------------------
+                        */
+                        const newResults =
+                            doc.querySelector(
+                                '[data-results-count]'
+                            );
+                        const currentResults =
+                            document.querySelector(
+                                '[data-results-count]'
+                            );
+                        if (
+                            newResults &&
+                            currentResults
+                        ) {
+                            currentResults.innerHTML =
+                                newResults.innerHTML;
+                        }
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Replace Pagination
+                        |--------------------------------------------------------------------------
+                        */
+                        const newPagination =
+                            doc.querySelector(
+                                '[data-pagination]'
+                            );
+                        const currentPagination =
+                            document.querySelector(
+                                '[data-pagination]'
+                            );
+                        if (
+                            newPagination &&
+                            currentPagination
+                        ) {
+                            currentPagination.replaceWith(
+                                newPagination
+                            );
+                        }
+                        if (
+                            !newPagination &&
+                            currentPagination
+                        ) {
+                            currentPagination.innerHTML = '';
+                        }
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Update URL
+                        |--------------------------------------------------------------------------
+                        */
+                        window.history.replaceState({},
+                            '',
+                            url
                         );
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    const parser =
-                        new DOMParser();
-                    const doc =
-                        parser.parseFromString(
-                            html,
-                            'text/html'
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Keep Search Focus
+                        |--------------------------------------------------------------------------
+                        */
+                        if (keepFocus) {
+                            searchInput.focus();
+                            const position =
+                                searchInput.value.length;
+                            searchInput.setSelectionRange(
+                                position,
+                                position
+                            );
+                        }
+                        refreshIcons();
+                    })
+                    .catch(error => {
+                        console.error(
+                            'Orders AJAX error:',
+                            error
                         );
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Replace Table Body
-                    |--------------------------------------------------------------------------
-                    */
-                    const newTableBody =
-                        doc.querySelector(
-                            'table tbody'
-                        );
-                    const currentTableBody =
-                        document.querySelector(
-                            'table tbody'
-                        );
-                    if (
-                        newTableBody &&
-                        currentTableBody
-                    ) {
-                        currentTableBody.innerHTML =
-                            newTableBody.innerHTML;
-                    }
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Replace Results Count
-                    |--------------------------------------------------------------------------
-                    */
-                    const newResults =
-                        doc.querySelector(
-                            '[data-results-count]'
-                        );
-                    const currentResults =
-                        document.querySelector(
-                            '[data-results-count]'
-                        );
-                    if (
-                        newResults &&
-                        currentResults
-                    ) {
-                        currentResults.innerHTML =
-                            newResults.innerHTML;
-                    }
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Replace Pagination
-                    |--------------------------------------------------------------------------
-                    */
-                    const newPagination =
-                        doc.querySelector(
-                            '[data-pagination]'
-                        );
-                    const currentPagination =
-                        document.querySelector(
-                            '[data-pagination]'
-                        );
-                    if (
-                        newPagination &&
-                        currentPagination
-                    ) {
-                        currentPagination.replaceWith(
-                            newPagination
-                        );
-                    }
-                    if (
-                        !newPagination &&
-                        currentPagination
-                    ) {
-                        currentPagination.innerHTML = '';
-                    }
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Update URL
-                    |--------------------------------------------------------------------------
-                    */
-                    window.history.replaceState(
-                        {},
-                        '',
-                        url
-                    );
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Keep Search Focus
-                    |--------------------------------------------------------------------------
-                    */
-                    if (keepFocus) {
-                        searchInput.focus();
-                        const position =
-                            searchInput.value.length;
-                        searchInput.setSelectionRange(
-                            position,
-                            position
-                        );
-                    }
-                    refreshIcons();
-                })
-                .catch(error => {
-                    console.error(
-                        'Orders AJAX error:',
-                        error
-                    );
-                });
+                    });
             }
             /*
             |--------------------------------------------------------------------------
@@ -797,14 +655,14 @@
             */
             searchInput.addEventListener(
                 'input',
-                function () {
+                function() {
                     clearTimeout(
                         searchTimeout
                     );
                     updateClearButton();
                     searchTimeout =
                         setTimeout(
-                            function () {
+                            function() {
                                 loadOrders(
                                     buildUrl(),
                                     true
@@ -821,7 +679,7 @@
             */
             statusFilter.addEventListener(
                 'change',
-                function () {
+                function() {
                     loadOrders(
                         buildUrl(),
                         false
@@ -835,7 +693,7 @@
             */
             sourceFilter.addEventListener(
                 'change',
-                function () {
+                function() {
                     loadOrders(
                         buildUrl(),
                         false
@@ -849,7 +707,7 @@
             */
             document.addEventListener(
                 'click',
-                function (event) {
+                function(event) {
                     const link =
                         event.target.closest(
                             '[data-pagination-link]'
@@ -871,7 +729,7 @@
             */
             clearSearch.addEventListener(
                 'click',
-                function () {
+                function() {
                     clearTimeout(
                         searchTimeout
                     );
