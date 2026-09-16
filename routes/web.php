@@ -46,6 +46,7 @@ Route::put('/products/{product}', [ProductController::class, 'update'])->name('p
 Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy')->middleware('auth');
 
 
+
 // Categories
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index')->middleware('auth'); 
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create')->middleware('auth');
@@ -66,6 +67,7 @@ Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clie
 Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy')->middleware('auth');
 
 
+
 // Suppliers
 Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index')->middleware('auth');
 Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create')->middleware('auth');
@@ -78,3 +80,12 @@ Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->
 
 // Orders
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware('auth'); 
+Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create')->middleware('auth');
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware('auth');
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show')->middleware('auth');
+// Special product actions
+Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status')->middleware('auth');
+// Dynamic {product} routes 
+Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit')->middleware('auth');
+Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update')->middleware('auth');
+Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy')->middleware('auth');

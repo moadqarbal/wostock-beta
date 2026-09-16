@@ -98,7 +98,7 @@
             <div id="menu-commandes" class="submenu pl-10 space-y-1">
                 <a href="{{ route('orders.index') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Historique</a>
-                <a href="/orders/add-order.php" class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Nouvelle
+                <a href="{{ route('orders.create') }}" class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Nouvelle
                     commande</a>
                 
             </div>
