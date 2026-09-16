@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
+
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Format;
 
 class ProductController extends Controller
 {
@@ -61,15 +67,103 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::orderBy('name')->get();
+        $suppliers = Supplier::orderBy('company_name')->get();
+
+        return view('products.create', compact('categories', 'suppliers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+
+        $request->merge([
+            'stock_quantity' => (int) $request->stock_quantity,
+            'minimum_stock' => $request->minimum_stock !== null
+                ? (int) $request->minimum_stock
+                : null,
+        ]);
+
+        $validated = $request->validate([
+            // ...
+            'stock_quantity' => 'required|integer|min:0',
+            'minimum_stock' => 'nullable|integer|min:0',
+        ]);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'sku' => 'required|string|max:255|unique:products,sku',
+            'category_id' => 'nullable|exists:categories,id',
+            'supplier_id' => 'required|exists:suppliers,id',
+            'price' => 'required|numeric|min:0',
+            'stock_quantity' => 'required|integer|min:0',
+            'minimum_stock' => 'nullable|integer|min:0',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
+        ]);
+
+        if ($request->hasFile('image')) {
+
+            $manager = new ImageManager(new Driver());
+
+            $image = $manager->decode(
+                $request->file('image')->getPathname()
+            );
+
+            // Resize large images
+            if ($image->width() > 1600) {
+                $image->scale(width: 1600);
+            }
+
+            $maxSize = 90 * 1024;
+            $quality = 85;
+
+            do {
+                $encoded = $image->encodeUsingFormat(
+                    Format::WEBP,
+                    quality: $quality
+                );
+
+                if ($encoded->size() <= $maxSize) {
+                    break;
+                }
+
+                if ($quality > 30) {
+                    $quality -= 10;
+                } else {
+                    $image->scale(
+                        width: max(300, (int) ($image->width() * 0.8))
+                    );
+
+                    $quality = 85;
+                }
+            } while (true);
+
+            $tempPath = tempnam(sys_get_temp_dir(), 'product_');
+
+            file_put_contents(
+                $tempPath,
+                (string) $encoded
+            );
+
+            $file = new \Illuminate\Http\UploadedFile(
+                $tempPath,
+                'product.webp',
+                'image/webp',
+                null,
+                true
+            );
+
+            $validated['image'] = $file->store(
+                'products',
+                'public'
+            );
+
+            unlink($tempPath);
+        }
+
+        Product::create($validated);
+
+        return to_route('products.index')
+            ->with('success', 'Le produit a été ajouté avec succès.');
     }
 
     /**
@@ -77,7 +171,21 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        $product->load([
+            'category',
+            'supplier',
+            'orderItems.order.client',
+        ]);
+
+        $totalSold = $product->orderItems->sum('quantity');
+
+        $totalRevenue = $product->orderItems->sum('subtotal');
+
+        return view('products.show', compact(
+            'product',
+            'totalSold',
+            'totalRevenue'
+        ));
     }
 
     /**

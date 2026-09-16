@@ -15,7 +15,7 @@
                     </p>
                 </div>
                 <a
-                    href="#"
+                    href="{{ route('products.create') }}"
                     class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all"
                 >
                     <i data-lucide="plus" class="w-4 h-4"></i>
@@ -198,7 +198,7 @@
                                         <div class="flex items-center justify-end gap-2">
                                             {{-- View --}}
                                             <a
-                                                href="#"
+                                                href="{{ route('products.show' , $product) }}"
                                                 title="Voir"
                                                 class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
                                             >
