@@ -460,7 +460,8 @@ class OrderController extends Controller
         |--------------------------------------------------------------------------
         */
 
-            $shippingCost = (float) $validated['shipping_cost'];
+            $shippingCost = (float) $validated['shipping_cost']; 
+            
 
             $order->update([
                 'subtotal' => $subtotal,
