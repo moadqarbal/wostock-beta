@@ -40,7 +40,7 @@
             <div id="menu-produits" class="submenu pl-10 space-y-1">
                 <a href="{{ route('products.index') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Liste des produits</a>
-                <a href="/products/add-product.php"
+                <a href="{{ route('products.create') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Ajouter un produit</a>
                 <a href="{{ route('categories.index') }}"
                     class="block py-2 text-sm text-slate-400 hover:text-indigo-400">Catégories</a>
