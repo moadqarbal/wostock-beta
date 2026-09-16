@@ -44,6 +44,21 @@
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
+
+                {{-- Date Filter --}}
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <input type="date" name="date_from" value="{{ request('date_from') }}"
+                        class="bg-white border border-slate-200 text-slate-600 text-sm rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
+
+                    <input type="date" name="date_to" value="{{ request('date_to') }}"
+                        class="bg-white border border-slate-200 text-slate-600 text-sm rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
+
+                    <button type="submit"
+                        class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl">
+                        Filtrer
+                    </button>
+                </div>
+
                 {{-- Stock Filter --}}
                 <div class="flex items-center gap-2 w-full md:w-auto">
                     <select id="stockFilter" name="stock" onchange="this.form.submit()"
@@ -62,6 +77,7 @@
                         </option>
                     </select>
                 </div>
+
             </form>
             {{-- Products Table --}}
             <div class="bg-white border-x border-b border-slate-200 rounded-b-2xl overflow-hidden">
@@ -119,6 +135,7 @@
                                             {{ $product->sku }}
                                         </span>
                                     </td>
+
                                     {{-- Price --}}
                                     <td class="px-6 py-4">
                                         <span class="font-semibold text-slate-800">
