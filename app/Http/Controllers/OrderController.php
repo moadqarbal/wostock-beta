@@ -124,6 +124,22 @@ class OrderController extends Controller
 
             $subtotal = 0;
 
+            foreach ($validated['products'] as $item) {
+
+                $product = Product::findOrFail($item['product_id']);
+
+                $quantity = (int) $item['quantity'];
+
+                if (
+                    $validated['status'] === 'Livrée' &&
+                    $quantity > $product->stock_quantity
+                ) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'products' => "Stock insuffisant pour le produit : {$product->name}.",
+                    ]);
+                }
+            }
+
             $order = Order::create([
                 'client_id' => $validated['client_id'],
                 'order_number' => 'CMD-' . now()->format('Ymd-His') . '-' . strtoupper(Str::random(4)),
@@ -151,23 +167,24 @@ class OrderController extends Controller
                 ]);
 
                 $subtotal += $itemSubtotal;
+
+                if ($validated['status'] === 'Livrée') {
+                    $product->decrement('stock_quantity', $quantity);
+                }
             }
 
             $shippingCost = (float) $validated['shipping_cost'];
 
-            $totalAmount = $subtotal + $shippingCost;
-
             $order->update([
                 'subtotal' => $subtotal,
                 'shipping_cost' => $shippingCost,
-                'total_amount' => $totalAmount,
+                'total_amount' => $subtotal + $shippingCost,
             ]);
         });
 
         return to_route('orders.index')
             ->with('success', 'La commande a été créée avec succès.');
     }
-
     /**
      * Display the specified resource.
      */
@@ -202,9 +219,61 @@ class OrderController extends Controller
             ],
         ]);
 
-        $order->update([
-            'status' => $validated['status'],
-        ]);
+        $oldStatus = $order->status;
+        $newStatus = $validated['status'];
+
+        if ($oldStatus === $newStatus) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Le statut est déjà ' . $newStatus . '.',
+                'status' => $order->status,
+            ]);
+        }
+
+        DB::transaction(function () use ($order, $oldStatus, $newStatus) {
+
+            $order->load('items.product');
+
+            // Order devient Livrée → diminuer le stock
+            if (
+                $oldStatus !== 'Livrée' &&
+                $newStatus === 'Livrée'
+            ) {
+                foreach ($order->items as $item) {
+
+                    $product = $item->product;
+
+                    if ($item->quantity > $product->stock_quantity) {
+                        throw \Illuminate\Validation\ValidationException::withMessages([
+                            'status' => "Stock insuffisant pour le produit : {$product->name}.",
+                        ]);
+                    }
+
+                    $product->decrement(
+                        'stock_quantity',
+                        $item->quantity
+                    );
+                }
+            }
+
+            // Order quitte Livrée vers Retournée → restaurer le stock
+            if (
+                $oldStatus === 'Livrée' &&
+                $newStatus === 'Retournée'
+            ) {
+                foreach ($order->items as $item) {
+
+                    $item->product->increment(
+                        'stock_quantity',
+                        $item->quantity
+                    );
+                }
+            }
+
+            $order->update([
+                'status' => $newStatus,
+            ]);
+        });
 
         return response()->json([
             'success' => true,
@@ -249,11 +318,6 @@ class OrderController extends Controller
                 'in:manuelle,whatsapp,site_web,woocommerce',
             ],
 
-            'status' => [
-                'required',
-                'in:En attente,Confirmée,Expédiée,Livrée,Annulée,Retournée',
-            ],
-
             'shipping_cost' => [
                 'required',
                 'numeric',
@@ -282,22 +346,98 @@ class OrderController extends Controller
 
             $subtotal = 0;
 
+            /*
+        |--------------------------------------------------------------------------
+        | Stock adjustment
+        |--------------------------------------------------------------------------
+        */
+
+            if ($order->status === 'Livrée') {
+
+                $oldItems = $order->items()
+                    ->get()
+                    ->keyBy('product_id');
+
+                $newItems = collect($validated['products'])
+                    ->groupBy('product_id')
+                    ->map(function ($items) {
+                        return $items->sum('quantity');
+                    });
+
+                // Products الموجودة قبل وما بقاتش في order
+                foreach ($oldItems as $productId => $oldItem) {
+
+                    $newQuantity = $newItems->get($productId, 0);
+
+                    $difference = $newQuantity - $oldItem->quantity;
+
+                    if ($difference > 0) {
+
+                        $product = Product::findOrFail($productId);
+
+                        if ($difference > $product->stock_quantity) {
+                            throw \Illuminate\Validation\ValidationException::withMessages([
+                                'products' => "Stock insuffisant pour le produit : {$product->name}.",
+                            ]);
+                        }
+
+                        $product->decrement(
+                            'stock_quantity',
+                            $difference
+                        );
+                    } elseif ($difference < 0) {
+
+                        Product::findOrFail($productId)->increment(
+                            'stock_quantity',
+                            abs($difference)
+                        );
+                    }
+                }
+
+                // Products جديدة ما كانتش في order
+                foreach ($newItems as $productId => $newQuantity) {
+
+                    if (!$oldItems->has($productId)) {
+
+                        $product = Product::findOrFail($productId);
+
+                        if ($newQuantity > $product->stock_quantity) {
+                            throw \Illuminate\Validation\ValidationException::withMessages([
+                                'products' => "Stock insuffisant pour le produit : {$product->name}.",
+                            ]);
+                        }
+
+                        $product->decrement(
+                            'stock_quantity',
+                            $newQuantity
+                        );
+                    }
+                }
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Update order
+        |--------------------------------------------------------------------------
+        */
+
             $order->update([
                 'client_id' => $validated['client_id'],
                 'source' => $validated['source'],
-                'status' => $validated['status'],
                 'shipping_cost' => $validated['shipping_cost'],
             ]);
 
-            // Supprimer les anciens produits
+            /*
+        |--------------------------------------------------------------------------
+        | Replace order items
+        |--------------------------------------------------------------------------
+        */
+
             $order->items()->delete();
 
-            // Ajouter les nouveaux produits
             foreach ($validated['products'] as $item) {
 
-                $product = Product::findOrFail(
-                    $item['product_id']
-                );
+                $product = Product::findOrFail($item['product_id']);
 
                 $quantity = (int) $item['quantity'];
                 $price = $product->price;
@@ -313,6 +453,12 @@ class OrderController extends Controller
 
                 $subtotal += $itemSubtotal;
             }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Update totals
+        |--------------------------------------------------------------------------
+        */
 
             $shippingCost = (float) $validated['shipping_cost'];
 
