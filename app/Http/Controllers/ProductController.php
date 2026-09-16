@@ -29,6 +29,9 @@ class ProductController extends Controller
                     ->orWhere('sku', 'like', "%{$search}%")
                     ->orWhereHas('supplier', function ($q) use ($search) {
                         $q->where('company_name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
                     });
             });
         }
@@ -42,15 +45,20 @@ class ProductController extends Controller
 
         if ($stock === 'faible') {
             $query->where('stock_quantity', '>', 0)
-                ->whereColumn(
-                    'stock_quantity',
-                    '<=',
-                    'minimum_stock'
-                );
+                ->whereColumn('stock_quantity', '<=', 'minimum_stock');
         }
 
         if ($stock === 'rupture') {
             $query->where('stock_quantity', 0);
+        }
+
+        // Date filter
+        if (request('date_from')) {
+            $query->whereDate('created_at', '>=', request('date_from'));
+        }
+
+        if (request('date_to')) {
+            $query->whereDate('created_at', '<=', request('date_to'));
         }
 
         // Pagination
