@@ -9,10 +9,8 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div>
                     <div class="flex items-center gap-2 text-slate-500 text-sm mb-2">
-                        <a
-                            href="{{ route('suppliers.index') }}"
-                            class="hover:text-indigo-600 transition-colors text-xs font-medium"
-                        >
+                        <a href="{{ route('suppliers.index') }}"
+                            class="hover:text-indigo-600 transition-colors text-xs font-medium">
                             Fournisseurs
                         </a>
 
@@ -33,18 +31,13 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <a
-                        href="{{ route('suppliers.index') }}"
-                        class="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-all"
-                    >
+                    <a href="{{ route('suppliers.index') }}"
+                        class="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-all">
                         Annuler
                     </a>
 
-                    <button
-                        type="submit"
-                        form="supplier-form"
-                        class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2 text-center justify-center"
-                    >
+                    <button type="submit" form="supplier-form"
+                        class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2 text-center justify-center">
                         <i data-lucide="user-plus" class="w-4 h-4"></i>
 
                         <span class="hidden sm:inline">
@@ -59,11 +52,7 @@
             </div>
 
             <!-- Formulaire -->
-            <form
-                id="supplier-form"
-                action="{{ route('suppliers.store') }}"
-                method="POST"
-            >
+            <form id="supplier-form" action="{{ route('suppliers.store') }}" method="POST">
                 @csrf
 
                 <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
@@ -82,22 +71,13 @@
 
                                 <!-- Nom -->
                                 <div class="md:col-span-2">
-                                    <label
-                                        for="company_name"
-                                        class="block text-sm font-semibold text-slate-700 mb-2"
-                                    >
+                                    <label for="company_name" class="block text-sm font-semibold text-slate-700 mb-2">
                                         Nom de l'entreprise / Fournisseur *
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="company_name"
-                                        name="company_name"
-                                        value="{{ old('company_name') }}"
-                                        placeholder="Ex: Sony Maroc SA"
-                                        required
-                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('company_name') border-red-500 @enderror"
-                                    >
+                                    <input type="text" id="company_name" name="company_name"
+                                        value="{{ old('company_name') }}" placeholder="Ex: Sony Maroc SA"
+                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('company_name') border-red-500 @enderror">
 
                                     @error('company_name')
                                         <p class="mt-1 text-sm text-red-600">
@@ -108,28 +88,17 @@
 
                                 <!-- Téléphone -->
                                 <div>
-                                    <label
-                                        for="phone"
-                                        class="block text-sm font-semibold text-slate-700 mb-2"
-                                    >
+                                    <label for="phone" class="block text-sm font-semibold text-slate-700 mb-2">
                                         Téléphone direct *
                                     </label>
 
                                     <div class="relative">
-                                        <i
-                                            data-lucide="phone"
-                                            class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
-                                        ></i>
+                                        <i data-lucide="phone"
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
 
-                                        <input
-                                            type="tel"
-                                            id="phone"
-                                            name="phone"
-                                            value="{{ old('phone') }}"
+                                        <input type="tel" id="phone" name="phone" value="{{ old('phone') }}"
                                             placeholder="+212 5..."
-                                            required
-                                            class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('phone') border-red-500 @enderror"
-                                        >
+                                            class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('phone') border-red-500 @enderror">
                                     </div>
 
                                     @error('phone')
@@ -141,27 +110,17 @@
 
                                 <!-- Email -->
                                 <div>
-                                    <label
-                                        for="email"
-                                        class="block text-sm font-semibold text-slate-700 mb-2"
-                                    >
+                                    <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
                                         E-mail professionnel
                                     </label>
 
                                     <div class="relative">
-                                        <i
-                                            data-lucide="mail"
-                                            class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
-                                        ></i>
+                                        <i data-lucide="mail"
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
 
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            value="{{ old('email') }}"
+                                        <input type="email" id="email" name="email" value="{{ old('email') }}"
                                             placeholder="contact@fournisseur.ma"
-                                            class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('email') border-red-500 @enderror"
-                                        >
+                                            class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('email') border-red-500 @enderror">
                                     </div>
 
                                     @error('email')
@@ -185,21 +144,13 @@
 
                                 <!-- Adresse -->
                                 <div class="md:col-span-3">
-                                    <label
-                                        for="address"
-                                        class="block text-sm font-semibold text-slate-700 mb-2"
-                                    >
+                                    <label for="address" class="block text-sm font-semibold text-slate-700 mb-2">
                                         Adresse du siège
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="address"
-                                        name="address"
-                                        value="{{ old('address') }}"
+                                    <input type="text" id="address" name="address" value="{{ old('address') }}"
                                         placeholder="N°, Rue, Quartier..."
-                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('address') border-red-500 @enderror"
-                                    >
+                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('address') border-red-500 @enderror">
 
                                     @error('address')
                                         <p class="mt-1 text-sm text-red-600">
@@ -210,21 +161,13 @@
 
                                 <!-- Ville -->
                                 <div>
-                                    <label
-                                        for="city"
-                                        class="block text-sm font-semibold text-slate-700 mb-2"
-                                    >
+                                    <label for="city" class="block text-sm font-semibold text-slate-700 mb-2">
                                         Ville
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="city"
-                                        name="city"
-                                        value="{{ old('city') }}"
+                                    <input type="text" id="city" name="city" value="{{ old('city') }}"
                                         placeholder="Ex: Casablanca"
-                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('city') border-red-500 @enderror"
-                                    >
+                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('city') border-red-500 @enderror">
 
                                     @error('city')
                                         <p class="mt-1 text-sm text-red-600">
@@ -235,21 +178,13 @@
 
                                 <!-- Code postal -->
                                 <div>
-                                    <label
-                                        for="postal_code"
-                                        class="block text-sm font-semibold text-slate-700 mb-2"
-                                    >
+                                    <label for="postal_code" class="block text-sm font-semibold text-slate-700 mb-2">
                                         Code Postal
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="postal_code"
-                                        name="postal_code"
-                                        value="{{ old('postal_code') }}"
-                                        placeholder="Ex: 20000"
-                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('postal_code') border-red-500 @enderror"
-                                    >
+                                    <input type="text" id="postal_code" name="postal_code"
+                                        value="{{ old('postal_code') }}" placeholder="Ex: 20000"
+                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 @error('postal_code') border-red-500 @enderror">
 
                                     @error('postal_code')
                                         <p class="mt-1 text-sm text-red-600">
@@ -260,18 +195,12 @@
 
                                 <!-- Pays -->
                                 <div>
-                                    <label
-                                        for="country"
-                                        class="block text-sm font-semibold text-slate-700 mb-2"
-                                    >
+                                    <label for="country" class="block text-sm font-semibold text-slate-700 mb-2">
                                         Pays
                                     </label>
 
-                                    <select
-                                        id="country"
-                                        name="country"
-                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 appearance-none @error('country') border-red-500 @enderror"
-                                    >
+                                    <select id="country" name="country"
+                                        class="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 appearance-none @error('country') border-red-500 @enderror">
                                         <option value="Maroc" @selected(old('country', 'Maroc') === 'Maroc')>
                                             Maroc
                                         </option>
@@ -306,12 +235,9 @@
                                 Notes confidentielles
                             </h3>
 
-                            <textarea
-                                id="notes"
-                                name="notes"
+                            <textarea id="notes" name="notes"
                                 placeholder="Ajoutez des détails sur la fiabilité, les délais habituels ou les conditions de paiement..."
-                                class="w-full flex-grow px-4 py-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 text-sm min-h-[300px] @error('notes') border-red-500 @enderror"
-                            >{{ old('notes') }}</textarea>
+                                class="w-full flex-grow px-4 py-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/30 text-sm min-h-[300px] @error('notes') border-red-500 @enderror">{{ old('notes') }}</textarea>
 
                             @error('notes')
                                 <p class="mt-1 text-sm text-red-600">

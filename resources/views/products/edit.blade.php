@@ -102,7 +102,7 @@
                                         value="{{ old('name', $product->name) }}"
                                         placeholder="Ex: Casque Bluetooth Bose QC45"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-indigo-500"
-                                        required
+                                        
                                     >
                                     @error('name')
                                         <p class="mt-2 text-sm text-red-600">
@@ -126,7 +126,7 @@
                                             value="{{ old('sku', $product->sku) }}"
                                             placeholder="Ex: WST-2024-001"
                                             class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-indigo-500"
-                                            required
+                                            
                                         >
                                         @error('sku')
                                             <p class="mt-2 text-sm text-red-600">
@@ -195,7 +195,7 @@
                                         min="0"
                                         step="0.01"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-indigo-500 font-bold text-indigo-600"
-                                        required
+                                        
                                     >
                                     @error('price')
                                         <p class="mt-2 text-sm text-red-600">
@@ -219,7 +219,7 @@
                                         placeholder="0"
                                         min="0"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-indigo-500 font-bold"
-                                        required
+                                        
                                     >
                                     @error('stock_quantity')
                                         <p class="mt-2 text-sm text-red-600">
@@ -313,7 +313,7 @@
                                 id="supplier_id"
                                 name="supplier_id"
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 outline-none focus:border-indigo-500"
-                                required
+                                
                             >
                                 <option value="">
                                     Sélectionner fournisseur

@@ -13,14 +13,11 @@
                     <p class="text-slate-500 text-sm">Bienvenue sur votre interface de gestion WoStock.</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button
-                        class="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-all flex items-center gap-2">
-                        <i data-lucide="download" class="w-4 h-4"></i> Exporter
-                    </button>
-                    <button
+
+                    <a href="{{ route('products.create') }}"
                         class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2">
                         <i data-lucide="plus" class="w-4 h-4"></i> Nouveau Produit
-                    </button>
+                    </a>
                 </div>
             </div>
 
