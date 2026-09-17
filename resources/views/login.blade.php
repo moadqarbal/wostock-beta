@@ -187,12 +187,12 @@
                     </a>
                 </p>
 
-                <p class="mt-4">
+                <!--<p class="mt-4">
                     <a class="text-xs font-bold text-indigo-400 hover:text-indigo-300 hover:underline transition"
-                        href="{{ route('users.create') }}">
+                        href="{{-- route('users.create') --}}">
                         Vous n’avez pas de compte ?
                     </a>
-                </p>
+                </p>-->
             </div>
         </div>
     </div>
