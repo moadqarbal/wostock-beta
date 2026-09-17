@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -40,7 +41,7 @@
 
     <div class="w-full max-w-[500px]">
 
-        <!-- Header -->
+        
         <div class="text-center mb-10">
             <div
                 class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-3xl shadow-xl shadow-slate-200/50 mb-6">
@@ -50,13 +51,11 @@
             <p class="text-slate-500 font-medium mt-2">Créez votre compte administrateur WoStock</p>
         </div>
 
-        <!-- Main Card -->
         <div class="setup-card rounded-[2.5rem] p-8 lg:p-12 shadow-2xl shadow-slate-200 border border-white">
             <form method="POST" action="{{ route('users.store') }}" class="space-y-5" onsubmit="handleRegister(event)">
 
                 @csrf
 
-                <!-- Username -->
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nom
                         d'utilisateur</label>
@@ -74,7 +73,6 @@
                     </div>
                 </div>
 
-                <!-- Email -->
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Adresse
                         Email</label>
@@ -92,7 +90,6 @@
                     </div>
                 </div>
 
-                <!-- Password -->
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Mot de
                         passe</label>
@@ -110,7 +107,6 @@
                     </div>
                 </div>
 
-                <!-- Confirm Password -->
                 <div class="space-y-2">
                     <label
                         class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Confirmation</label>
@@ -127,7 +123,6 @@
                     </div>
                 </div>
 
-                <!-- Important Note -->
                 <div class="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-start gap-3">
                     <i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5"></i>
                     <p class="text-[11px] text-indigo-700/80 leading-relaxed font-semibold">
@@ -143,7 +138,6 @@
             </form>
         </div>
 
-        <!-- Footer -->
         <div class="mt-12 text-center">
             <div class="flex items-center justify-center gap-2 mb-2">
                 <div class="w-6 h-6 bg-slate-200 rounded flex items-center justify-center">
@@ -183,3 +177,4 @@
 </body>
 
 </html>
+-->

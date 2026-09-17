@@ -15,12 +15,12 @@ class UserController extends Controller
 {
     public function create()
     {
-        return view('register');
+        // return view('register');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' =>  'required|email|unique:users,email',
             'password' => 'required|confirmed',
@@ -32,7 +32,7 @@ class UserController extends Controller
 
         Auth::login($user);
 
-        return to_route('dashboard.index')->with('success', 'Welcome ' . $user->name . '!');
+        return to_route('dashboard.index')->with('success', 'Welcome ' . $user->name . '!');*/
     }
 
     public function login()

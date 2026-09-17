@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 
 // Users
-Route::get('/register' , [UserController::class , 'create'])->name('users.create')->middleware('guest');
-Route::post('/users' , [UserController::class , 'store'])->name('users.store')->middleware('guest');
+// Route::get('/register' , [UserController::class , 'create'])->name('users.create')->middleware('guest');
+// Route::post('/users' , [UserController::class , 'store'])->name('users.store')->middleware('guest');
 Route::get('/login', [UserController::class, 'login'])->name('users.login')->middleware('guest');
 Route::post('/authenticate', [UserController::class, 'authenticate'])->name('authenticate')->middleware('guest');
 Route::post('/logout', [UserController::class, 'logout'])->name('users.logout')->middleware('auth');
