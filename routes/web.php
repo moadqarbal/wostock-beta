@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,9 @@ Route::post('/reset-password', [PasswordController::class, 'update'])->name('pas
 // Dashboard
 Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index')->middleware('auth');
 Route::get('/analytics' , [DashboardController::class , 'analytics'])->name('dashboard.analytics')->middleware('auth');
+Route::get('/dashboard/help', [DashboardController::class, 'help'])->name('dashboard.help')->middleware('auth');
+Route::get('/dashboard/propose-feature', [DashboardController::class, 'proposeFeature'])->name('dashboard.propose-feature')->middleware('auth');
+Route::post('/dashboard/propose-feature', [DashboardController::class, 'sendFeatureProposal'])->name('dashboard.propose-feature.send')->middleware('auth');
 
 
 // Products
@@ -89,3 +93,11 @@ Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])
 Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit')->middleware('auth');
 Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update')->middleware('auth');
 Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy')->middleware('auth');
+
+
+// Profiles
+Route::get('/dashboard/profile', [ProfileController::class, 'edit'])->name('dashboard.edit')->middleware('auth');
+Route::put('/dashboard/profile', [ProfileController::class, 'updateProfile'])->name('dashboard.profile.update')->middleware('auth');
+Route::put('/dashboard/password', [ProfileController::class, 'updatePassword'])->name('dashboard.password.update')->middleware('auth');
+
+

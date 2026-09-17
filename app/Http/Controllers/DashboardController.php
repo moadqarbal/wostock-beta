@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
@@ -25,122 +26,119 @@ class DashboardController extends Controller
     }
 
     public function analytics()
-{
-    $period = request('period', '7');
+    {
+        $period = request('period', '7');
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Date Range
     |--------------------------------------------------------------------------
     */
 
-    $endDate = now()->endOfDay();
+        $endDate = now()->endOfDay();
 
-    if ($period === '7') {
-        $startDate = now()->subDays(6)->startOfDay();
-    } elseif ($period === '30') {
-        $startDate = now()->subDays(29)->startOfDay();
-    } elseif ($period === '90') {
-        $startDate = now()->subDays(89)->startOfDay();
-    } else {
-        $startDate = null;
-    }
+        if ($period === '7') {
+            $startDate = now()->subDays(6)->startOfDay();
+        } elseif ($period === '30') {
+            $startDate = now()->subDays(29)->startOfDay();
+        } elseif ($period === '90') {
+            $startDate = now()->subDays(89)->startOfDay();
+        } else {
+            $startDate = null;
+        }
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Orders Query
     |--------------------------------------------------------------------------
     */
 
-    $ordersQuery = Order::query()
-        ->whereNotIn('status', [
-            'Annulée',
-            'Retournée',
-        ]);
+        $ordersQuery = Order::query()
+            ->whereNotIn('status', [
+                'Annulée',
+                'Retournée',
+            ]);
 
-    if ($startDate) {
-        $ordersQuery->whereBetween('created_at', [
-            $startDate,
-            $endDate
-        ]);
-    }
-
-
-    $orders = $ordersQuery->get();
+        if ($startDate) {
+            $ordersQuery->whereBetween('created_at', [
+                $startDate,
+                $endDate
+            ]);
+        }
 
 
-    /*
+        $orders = $ordersQuery->get();
+
+
+        /*
     |--------------------------------------------------------------------------
     | KPIs
     |--------------------------------------------------------------------------
     */
 
-    $totalRevenue = $orders->sum('total_amount');
+        $totalRevenue = $orders->sum('total_amount');
 
-    $totalOrders = $orders->count();
+        $totalOrders = $orders->count();
 
-    $averageOrder = $totalOrders > 0
-        ? $totalRevenue / $totalOrders
-        : 0;
+        $averageOrder = $totalOrders > 0
+            ? $totalRevenue / $totalOrders
+            : 0;
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | New Clients
     |--------------------------------------------------------------------------
     */
 
-    $clientsQuery = Client::query();
+        $clientsQuery = Client::query();
 
-    if ($startDate) {
-        $clientsQuery->whereBetween('created_at', [
-            $startDate,
-            $endDate
-        ]);
-    }
+        if ($startDate) {
+            $clientsQuery->whereBetween('created_at', [
+                $startDate,
+                $endDate
+            ]);
+        }
 
-    $newClients = $clientsQuery->count();
+        $newClients = $clientsQuery->count();
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Revenue Chart
     |--------------------------------------------------------------------------
     */
 
-    $revenueChart = [];
+        $revenueChart = [];
 
-    if ($period === '7') {
+        if ($period === '7') {
 
-        $days = 7;
+            $days = 7;
+        } elseif ($period === '30') {
 
-    } elseif ($period === '30') {
+            $days = 30;
+        } elseif ($period === '90') {
 
-        $days = 30;
+            $days = 90;
+        } else {
 
-    } elseif ($period === '90') {
-
-        $days = 90;
-
-    } else {
-
-        /*
+            /*
         | Pour "Tout le temps", on récupère la date
         | de la première commande.
         */
 
-        $firstOrderDate = Order::min('created_at');
+            $firstOrderDate = Order::min('created_at');
 
-        $days = $firstOrderDate
-            ? now()->diffInDays(
-                \Carbon\Carbon::parse($firstOrderDate)
-            ) + 1
-            : 1;
-    }
+            $days = $firstOrderDate
+                ? now()->diffInDays(
+                    \Carbon\Carbon::parse($firstOrderDate)
+                ) + 1
+                : 1;
+        }
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Chart
     |--------------------------------------------------------------------------
@@ -151,143 +149,142 @@ class DashboardController extends Controller
     |
     */
 
-    for ($i = $days - 1; $i >= 0; $i--) {
+        for ($i = $days - 1; $i >= 0; $i--) {
 
-        $date = now()->subDays($i);
+            $date = now()->subDays($i);
 
-        $revenueQuery = Order::query()
-            ->whereDate(
-                'created_at',
-                $date->toDateString()
-            )
-            ->whereNotIn('status', [
-                'Annulée',
-                'Retournée',
-            ]);
+            $revenueQuery = Order::query()
+                ->whereDate(
+                    'created_at',
+                    $date->toDateString()
+                )
+                ->whereNotIn('status', [
+                    'Annulée',
+                    'Retournée',
+                ]);
 
-        $revenue = $revenueQuery->sum('total_amount');
+            $revenue = $revenueQuery->sum('total_amount');
 
-        $revenueChart[] = [
-            'label' => $date->format('d/m'),
-            'date' => $date->format('Y-m-d'),
-            'revenue' => (float) $revenue,
-        ];
-    }
+            $revenueChart[] = [
+                'label' => $date->format('d/m'),
+                'date' => $date->format('Y-m-d'),
+                'revenue' => (float) $revenue,
+            ];
+        }
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Sources
     |--------------------------------------------------------------------------
     */
 
-    $sourceQuery = Order::query()
-        ->whereNotIn('status', [
-            'Annulée',
-            'Retournée',
-        ]);
+        $sourceQuery = Order::query()
+            ->whereNotIn('status', [
+                'Annulée',
+                'Retournée',
+            ]);
 
-    if ($startDate) {
-        $sourceQuery->whereBetween('created_at', [
-            $startDate,
-            $endDate
-        ]);
-    }
+        if ($startDate) {
+            $sourceQuery->whereBetween('created_at', [
+                $startDate,
+                $endDate
+            ]);
+        }
 
-    $sourceStats = $sourceQuery
-        ->select(
-            'source',
-            DB::raw('COUNT(*) as total')
-        )
-        ->groupBy('source')
-        ->pluck('total', 'source');
-
-
-    $sourceChart = [
-        'whatsapp' => $sourceStats->get('whatsapp', 0),
-
-        'woocommerce' => $sourceStats->get('woocommerce', 0),
-
-        'manuelle' => $sourceStats->get('manuelle', 0),
-
-        'site_web' => $sourceStats->get('site_web', 0),
-    ];
+        $sourceStats = $sourceQuery
+            ->select(
+                'source',
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('source')
+            ->pluck('total', 'source');
 
 
-    /*
+        $sourceChart = [
+            'whatsapp' => $sourceStats->get('whatsapp', 0),
+
+            'woocommerce' => $sourceStats->get('woocommerce', 0),
+
+            'manuelle' => $sourceStats->get('manuelle', 0),
+
+            'site_web' => $sourceStats->get('site_web', 0),
+        ];
+
+
+        /*
     |--------------------------------------------------------------------------
     | Top Products
     |--------------------------------------------------------------------------
     */
 
-    $topProductsQuery = OrderItem::query()
-        ->whereHas('order', function ($query) use (
-            $startDate,
-            $endDate
-        ) {
+        $topProductsQuery = OrderItem::query()
+            ->whereHas('order', function ($query) use (
+                $startDate,
+                $endDate
+            ) {
 
-            $query->whereNotIn('status', [
-                'Annulée',
-                'Retournée',
-            ]);
-
-            if ($startDate) {
-                $query->whereBetween('created_at', [
-                    $startDate,
-                    $endDate
+                $query->whereNotIn('status', [
+                    'Annulée',
+                    'Retournée',
                 ]);
-            }
 
-        });
-
-
-    $topProducts = $topProductsQuery
-        ->select(
-            'product_id',
-            DB::raw('SUM(quantity) as total_quantity')
-        )
-        ->groupBy('product_id')
-        ->orderByDesc('total_quantity')
-        ->with('product')
-        ->take(5)
-        ->get();
+                if ($startDate) {
+                    $query->whereBetween('created_at', [
+                        $startDate,
+                        $endDate
+                    ]);
+                }
+            });
 
 
-    /*
+        $topProducts = $topProductsQuery
+            ->select(
+                'product_id',
+                DB::raw('SUM(quantity) as total_quantity')
+            )
+            ->groupBy('product_id')
+            ->orderByDesc('total_quantity')
+            ->with('product')
+            ->take(5)
+            ->get();
+
+
+        /*
     |--------------------------------------------------------------------------
     | Critical Stock
     |--------------------------------------------------------------------------
     */
 
-    $criticalProducts = Product::with('supplier')
-        ->whereColumn(
-            'stock_quantity',
-            '<=',
-            'minimum_stock'
-        )
-        ->orderBy('stock_quantity')
-        ->take(5)
-        ->get();
+        $criticalProducts = Product::with('supplier')
+            ->whereColumn(
+                'stock_quantity',
+                '<=',
+                'minimum_stock'
+            )
+            ->orderBy('stock_quantity')
+            ->take(5)
+            ->get();
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | View
     |--------------------------------------------------------------------------
     */
 
-    return view('dashboard.analytics', compact(
-        'period',
-        'totalRevenue',
-        'totalOrders',
-        'averageOrder',
-        'newClients',
-        'revenueChart',
-        'sourceChart',
-        'topProducts',
-        'criticalProducts'
-    ));
-}
+        return view('dashboard.analytics', compact(
+            'period',
+            'totalRevenue',
+            'totalOrders',
+            'averageOrder',
+            'newClients',
+            'revenueChart',
+            'sourceChart',
+            'topProducts',
+            'criticalProducts'
+        ));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -335,5 +332,44 @@ class DashboardController extends Controller
     public function destroy(Dashboard $dashboard)
     {
         //
+    }
+
+    public function help()
+    {
+        return view('dashboard.help');
+    }
+
+    public function proposeFeature()
+    {
+        return view('dashboard.propose-feature');
+    }
+
+    public function sendFeatureProposal(Request $request)
+    {
+        $validated = $request->validate([
+            'subject' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:5000'],
+        ]);
+
+        try {
+            Mail::raw($validated['message'], function ($mail) use ($validated, $request) {
+                $mail->to('wobranding1@gmail.com')
+                    ->subject('WoStock Feature Proposal - ' . $validated['subject'])
+                    ->replyTo(
+                        $request->user()->email,
+                        $request->user()->name
+                    );
+            });
+
+            return back()->with(
+                'success',
+                'Votre proposition a été envoyée avec succès.'
+            );
+        } catch (\Throwable $e) {
+            return back()->with(
+                'error',
+                'Impossible d’envoyer votre proposition. Vérifiez la configuration SMTP.'
+            );
+        }
     }
 }
