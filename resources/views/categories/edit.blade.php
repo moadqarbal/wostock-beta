@@ -61,7 +61,7 @@
                                     value="{{ old('name', $category->name) }}"
                                     placeholder="Ex: Informatique"
                                     class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-indigo-500"
-                                    required
+                                    
                                 >
                                 @error('name')
                                     <p class="mt-2 text-sm text-red-600">

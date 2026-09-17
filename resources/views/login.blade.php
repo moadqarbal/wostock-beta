@@ -130,7 +130,10 @@
                             class="w-full pl-12 pr-4 py-4 rounded-2xl input-glass outline-none font-medium">
                     </div>
                     @error('email')
-                        <p class="text-xs text-red-400">{{ $message }}</p>
+                        <p class="mt-2 text-sm font-semibold text-red-400 flex items-center gap-2">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
 

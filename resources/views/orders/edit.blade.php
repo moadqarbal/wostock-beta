@@ -45,7 +45,7 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Client
                                     </label>
-                                    <select name="client_id" id="client-select" required class="w-full">
+                                    <select name="client_id" id="client-select"  class="w-full">
                                         <option value="">Sélectionner un client</option>
 
                                         @foreach ($clients as $client)
@@ -63,7 +63,7 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Source
                                     </label>
-                                    <select name="source" required
+                                    <select name="source" 
                                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black">
                                         <option value="manuelle" @selected(old('source', $order->source) === 'manuelle')>
                                             Manuelle
@@ -84,7 +84,7 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Statut
                                     </label>
-                                    <select name="status" required
+                                    <select name="status" 
                                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black">
                                         @foreach (['En attente', 'Confirmée', 'Expédiée', 'Livrée', 'Annulée', 'Retournée'] as $status)
                                             <option value="{{ $status }}" @selected(old('status', $order->status) === $status)>
@@ -101,7 +101,7 @@
                                     <div class="relative">
                                         <input type="number" name="shipping_cost" id="shipping-cost"
                                             value="{{ old('shipping_cost', $order->shipping_cost) }}" min="0"
-                                            step="0.01" oninput="calculateGlobalTotal()" required
+                                            step="0.01" oninput="calculateGlobalTotal()" 
                                             class="w-full px-4 py-2.5 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black">
                                         <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-500">
                                             DH
@@ -137,7 +137,7 @@
                                             </label>
                                             <select name="products[{{ $index }}][product_id]"
                                                 class="product-select w-full" onchange="calculateGlobalTotal()"
-                                                required>
+                                                >
                                                 <option value="">Sélectionner un produit</option>
 
                                                 @foreach ($products as $product)
@@ -158,7 +158,7 @@
                                             </label>
                                             <input type="number" name="products[{{ $index }}][quantity]"
                                                 value="{{ old("products.$index.quantity", $item->quantity) }}"
-                                                min="1" required
+                                                min="1" 
                                                 class="quantity-input w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
                                                 oninput="calculateGlobalTotal()">
                                         </div>
@@ -312,7 +312,7 @@
                         name="products[${productIndex}][product_id]"
                         class="product-select w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
                         onchange="calculateGlobalTotal()"
-                        required
+                        
                     >
                         <option value="">
                             Sélectionner un produit
@@ -337,7 +337,7 @@
                         name="products[${productIndex}][quantity]"
                         value="1"
                         min="1"
-                        required
+                        
                         class="quantity-input w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black"
                         oninput="calculateGlobalTotal()"
                     >
