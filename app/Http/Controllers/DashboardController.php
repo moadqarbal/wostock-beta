@@ -751,4 +751,15 @@ class DashboardController extends Controller
             'Content-Type' => 'text/csv; charset=UTF-8',
         ]);
     }
+
+
+    public function error404()
+    {
+        return view('errors.404');
+    }
+
+    public function error500()
+    {
+        return view('errors.500');
+    }
 }

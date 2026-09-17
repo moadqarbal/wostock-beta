@@ -45,7 +45,7 @@
                     </button>
                 </div>
 
-                {{-- Date Filter --}}
+                {{-- Date Filter 
                 <div class="flex items-center gap-2 w-full md:w-auto">
                     <input type="date" name="date_from" value="{{ request('date_from') }}"
                         class="bg-white border border-slate-200 text-slate-600 text-sm rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
@@ -57,7 +57,7 @@
                         class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl">
                         Filtrer
                     </button>
-                </div>
+                </div> --}}
 
                 {{-- Stock Filter --}}
                 <div class="flex items-center gap-2 w-full md:w-auto">
