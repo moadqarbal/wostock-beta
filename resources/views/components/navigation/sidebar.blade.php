@@ -106,7 +106,7 @@
 
         <div class="pt-6 pb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4">Système</div>
 
-        <a href="/settings/settings.php"
+        <a href="{{ route('dashboard.edit') }}"
             class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
             <i data-lucide="settings" class="w-5 h-5"></i>
             <span class="font-medium">Paramètres</span>
