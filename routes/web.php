@@ -33,6 +33,8 @@ Route::get('/analytics' , [DashboardController::class , 'analytics'])->name('das
 Route::get('/dashboard/help', [DashboardController::class, 'help'])->name('dashboard.help')->middleware('auth');
 Route::get('/dashboard/propose-feature', [DashboardController::class, 'proposeFeature'])->name('dashboard.propose-feature')->middleware('auth');
 Route::post('/dashboard/propose-feature', [DashboardController::class, 'sendFeatureProposal'])->name('dashboard.propose-feature.send')->middleware('auth');
+Route::get('/dashboard/analytics/export', [DashboardController::class, 'exportAnalytics'])->name('dashboard.analytics.export')->middleware('auth');
+
 
 
 // Products
