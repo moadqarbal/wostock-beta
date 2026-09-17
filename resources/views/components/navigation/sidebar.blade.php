@@ -57,6 +57,126 @@
         </a>
 
 
+
+        <!-- ==================== CLIENTS ==================== -->
+
+        <div class="space-y-1">
+
+            <button
+                onclick="toggleSubmenu('menu-clients', 'icon-clients')"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
+                {{ request()->routeIs('clients.*')
+                    ? 'bg-slate-800 text-white'
+                    : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+
+                <div class="flex items-center gap-3">
+
+                    <i data-lucide="users" class="w-5 h-5"></i>
+
+                    <span class="font-medium">
+                        Clients
+                    </span>
+
+                </div>
+
+                <i data-lucide="chevron-down"
+                    id="icon-clients"
+                    class="w-4 h-4 rotate-icon">
+                </i>
+
+            </button>
+
+
+            <div id="menu-clients"
+                class="submenu pl-10 space-y-1
+                {{ request()->routeIs('clients.*') ? 'open' : '' }}">
+
+                <a href="{{ route('clients.index') }}"
+                    class="block py-2 text-sm transition-all
+                    {{ request()->routeIs('clients.index')
+                        ? 'text-indigo-400 font-semibold'
+                        : 'text-slate-400 hover:text-indigo-400' }}">
+
+                    Liste des clients
+
+                </a>
+
+
+                <a href="{{ route('clients.create') }}"
+                    class="block py-2 text-sm transition-all
+                    {{ request()->routeIs('clients.create')
+                        ? 'text-indigo-400 font-semibold'
+                        : 'text-slate-400 hover:text-indigo-400' }}">
+
+                    Ajouter un client
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================== FOURNISSEURS ==================== -->
+
+        <div class="space-y-1">
+
+            <button
+                onclick="toggleSubmenu('menu-fourn', 'icon-fourn')"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
+                {{ request()->routeIs('suppliers.*')
+                    ? 'bg-slate-800 text-white'
+                    : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+
+                <div class="flex items-center gap-3">
+
+                    <i data-lucide="truck" class="w-5 h-5"></i>
+
+                    <span class="font-medium">
+                        Fournisseurs
+                    </span>
+
+                </div>
+
+                <i data-lucide="chevron-down"
+                    id="icon-fourn"
+                    class="w-4 h-4 rotate-icon">
+                </i>
+
+            </button>
+
+
+            <div id="menu-fourn"
+                class="submenu pl-10 space-y-1
+                {{ request()->routeIs('suppliers.*') ? 'open' : '' }}">
+
+                <a href="{{ route('suppliers.index') }}"
+                    class="block py-2 text-sm transition-all
+                    {{ request()->routeIs('suppliers.index')
+                        ? 'text-indigo-400 font-semibold'
+                        : 'text-slate-400 hover:text-indigo-400' }}">
+
+                    Liste fournisseurs
+
+                </a>
+
+
+                <a href="{{ route('suppliers.create') }}"
+                    class="block py-2 text-sm transition-all
+                    {{ request()->routeIs('suppliers.create')
+                        ? 'text-indigo-400 font-semibold'
+                        : 'text-slate-400 hover:text-indigo-400' }}">
+
+                    Ajouter fournisseur
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
         <!-- ==================== PRODUITS ==================== -->
 
         <div class="space-y-1">
@@ -126,123 +246,6 @@
 
         </div>
 
-
-        <!-- ==================== FOURNISSEURS ==================== -->
-
-        <div class="space-y-1">
-
-            <button
-                onclick="toggleSubmenu('menu-fourn', 'icon-fourn')"
-                class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
-                {{ request()->routeIs('suppliers.*')
-                    ? 'bg-slate-800 text-white'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-
-                <div class="flex items-center gap-3">
-
-                    <i data-lucide="truck" class="w-5 h-5"></i>
-
-                    <span class="font-medium">
-                        Fournisseurs
-                    </span>
-
-                </div>
-
-                <i data-lucide="chevron-down"
-                    id="icon-fourn"
-                    class="w-4 h-4 rotate-icon">
-                </i>
-
-            </button>
-
-
-            <div id="menu-fourn"
-                class="submenu pl-10 space-y-1
-                {{ request()->routeIs('suppliers.*') ? 'open' : '' }}">
-
-                <a href="{{ route('suppliers.index') }}"
-                    class="block py-2 text-sm transition-all
-                    {{ request()->routeIs('suppliers.index')
-                        ? 'text-indigo-400 font-semibold'
-                        : 'text-slate-400 hover:text-indigo-400' }}">
-
-                    Liste fournisseurs
-
-                </a>
-
-
-                <a href="{{ route('suppliers.create') }}"
-                    class="block py-2 text-sm transition-all
-                    {{ request()->routeIs('suppliers.create')
-                        ? 'text-indigo-400 font-semibold'
-                        : 'text-slate-400 hover:text-indigo-400' }}">
-
-                    Ajouter fournisseur
-
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <!-- ==================== CLIENTS ==================== -->
-
-        <div class="space-y-1">
-
-            <button
-                onclick="toggleSubmenu('menu-clients', 'icon-clients')"
-                class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
-                {{ request()->routeIs('clients.*')
-                    ? 'bg-slate-800 text-white'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-
-                <div class="flex items-center gap-3">
-
-                    <i data-lucide="users" class="w-5 h-5"></i>
-
-                    <span class="font-medium">
-                        Clients
-                    </span>
-
-                </div>
-
-                <i data-lucide="chevron-down"
-                    id="icon-clients"
-                    class="w-4 h-4 rotate-icon">
-                </i>
-
-            </button>
-
-
-            <div id="menu-clients"
-                class="submenu pl-10 space-y-1
-                {{ request()->routeIs('clients.*') ? 'open' : '' }}">
-
-                <a href="{{ route('clients.index') }}"
-                    class="block py-2 text-sm transition-all
-                    {{ request()->routeIs('clients.index')
-                        ? 'text-indigo-400 font-semibold'
-                        : 'text-slate-400 hover:text-indigo-400' }}">
-
-                    Liste des clients
-
-                </a>
-
-
-                <a href="{{ route('clients.create') }}"
-                    class="block py-2 text-sm transition-all
-                    {{ request()->routeIs('clients.create')
-                        ? 'text-indigo-400 font-semibold'
-                        : 'text-slate-400 hover:text-indigo-400' }}">
-
-                    Ajouter un client
-
-                </a>
-
-            </div>
-
-        </div>
 
 
         <!-- ==================== COMMANDES ==================== -->
