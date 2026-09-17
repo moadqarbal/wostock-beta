@@ -3,13 +3,21 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Installer\AdminController;
+use App\Http\Controllers\Installer\ApplicationController;
+use App\Http\Controllers\Installer\DatabaseController;
+use App\Http\Controllers\Installer\InstallController;
+use App\Http\Controllers\Installer\MailController;
+use App\Http\Controllers\Installer\RequirementsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
+
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -29,7 +37,15 @@ Route::post('/reset-password', [PasswordController::class, 'update'])->name('pas
 
 
 // Dashboard
-Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index')->middleware('auth');
+Route::get('/', function () {
+    if (!file_exists(storage_path('framework/installed'))) {
+        return redirect()->route('installer.requirements');
+    }
+
+    return app(DashboardController::class)->index(request());
+})->name('dashboard.index');
+
+//Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index')->middleware('auth');
 Route::get('/analytics' , [DashboardController::class , 'analytics'])->name('dashboard.analytics')->middleware('auth');
 Route::get('/dashboard/help', [DashboardController::class, 'help'])->name('dashboard.help')->middleware('auth');
 Route::get('/dashboard/propose-feature', [DashboardController::class, 'proposeFeature'])->name('dashboard.propose-feature')->middleware('auth');
@@ -105,3 +121,38 @@ Route::put('/dashboard/profile', [ProfileController::class, 'updateProfile'])->n
 Route::put('/dashboard/password', [ProfileController::class, 'updatePassword'])->name('dashboard.password.update')->middleware('auth');
 
 
+Route::middleware('installer.lock')->group(function () {
+
+    Route::get('/install', [RequirementsController::class, 'index'])
+        ->name('installer.requirements');
+
+    Route::get('/install/database', [DatabaseController::class, 'index'])
+        ->name('installer.database');
+
+    Route::post('/install/database/test', [DatabaseController::class, 'test'])
+        ->name('installer.database.test');
+
+    Route::get('/install/application', [ApplicationController::class, 'index'])
+        ->name('installer.application');
+
+    Route::post('/install/application', [ApplicationController::class, 'store'])
+        ->name('installer.application.store');
+
+    Route::get('/install/mail', [MailController::class, 'index'])
+        ->name('installer.mail');
+
+    Route::post('/install/mail/test', [MailController::class, 'test'])
+        ->name('installer.mail.test');
+
+    Route::get('/install/admin', [AdminController::class, 'index'])
+        ->name('installer.admin');
+
+    Route::post('/install/admin', [AdminController::class, 'store'])
+        ->name('installer.admin.store');
+
+    Route::get('/install/finish', [InstallController::class, 'index'])
+        ->name('installer.install');
+
+    Route::post('/install/finish', [InstallController::class, 'install'])
+        ->name('installer.install.run');
+});
