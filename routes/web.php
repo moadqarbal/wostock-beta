@@ -20,6 +20,7 @@ Route::get('/login', [UserController::class, 'login'])->name('users.login')->mid
 Route::post('/authenticate', [UserController::class, 'authenticate'])->name('authenticate')->middleware('guest');
 Route::post('/logout', [UserController::class, 'logout'])->name('users.logout')->middleware('auth');
 
+
 // Password Reset
 Route::get('/forgot-password', [PasswordController::class, 'request'])->name('password.request')->middleware('guest');
 Route::post('/forgot-password', [PasswordController::class, 'email'])->name('password.email')->middleware('guest');
@@ -60,7 +61,8 @@ Route::post('/categories', [CategoryController::class, 'store'])->name('categori
 Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit')->middleware('auth');
 Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update')->middleware('auth');
 Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy')->middleware('auth');
-
+Route::get('/dashboard/error-404', [DashboardController::class, 'error404'])->name('dashboard.error-404');
+Route::get('/dashboard/error-500', [DashboardController::class, 'error500'])->name('dashboard.error-500');
 
 
 // Clients
