@@ -50,18 +50,14 @@ class OrderController extends Controller
             ->withQueryString();
 
         // Statistics
-        $pendingCount = Order::where('status', 'En attente')
-            ->count();
+        $pendingCount = Order::where('status', 'En attente')->count();
 
-        $shippedCount = Order::where('status', 'Expédiée')
-            ->count();
+        $shippedCount = Order::where('status', 'Expédiée')->count();
 
-        $deliveredCount = Order::where('status', 'Livrée')
-            ->count();
+        $deliveredCount = Order::where('status', 'Livrée')->count();
 
         $todayTotal = Order::whereDate('created_at', today())
             ->sum('total_amount');
-
 
         return view('orders.index', compact(
             'orders',
@@ -83,7 +79,10 @@ class OrderController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('orders.create', compact('clients', 'products'));
+        return view('orders.create', compact(
+            'clients',
+            'products'
+        ));
     }
 
     /**
@@ -92,7 +91,10 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'client_id' => ['required', 'exists:clients,id'],
+            'client_id' => [
+                'required',
+                'exists:clients,id',
+            ],
 
             'source' => [
                 'required',
@@ -104,9 +106,17 @@ class OrderController extends Controller
                 'in:En attente,Confirmée,Expédiée,Livrée,Annulée,Retournée',
             ],
 
-            'shipping_cost' => ['required', 'numeric', 'min:0'],
+            'shipping_cost' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
 
-            'products' => ['required', 'array', 'min:1'],
+            'products' => [
+                'required',
+                'array',
+                'min:1',
+            ],
 
             'products.*.product_id' => [
                 'required',
@@ -124,25 +134,56 @@ class OrderController extends Controller
 
             $subtotal = 0;
 
-            foreach ($validated['products'] as $item) {
+            /*
+            |--------------------------------------------------------------------------
+            | Group products
+            |--------------------------------------------------------------------------
+            */
 
-                $product = Product::findOrFail($item['product_id']);
+            $products = collect($validated['products'])
+                ->groupBy('product_id')
+                ->map(function ($items) {
+                    return $items->sum('quantity');
+                });
 
-                $quantity = (int) $item['quantity'];
+            /*
+            |--------------------------------------------------------------------------
+            | Check stock
+            |--------------------------------------------------------------------------
+            |
+            | Toujours vérifier le stock avant de créer la commande.
+            |
+            */
 
-                if (
-                    $validated['status'] === 'Livrée' &&
-                    $quantity > $product->stock_quantity
-                ) {
+            foreach ($products as $productId => $quantity) {
+
+                $product = Product::findOrFail($productId);
+
+                if ($quantity > $product->stock_quantity) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
-                        'products' => "Stock insuffisant pour le produit : {$product->name}.",
+                        'products' =>
+                            "Stock insuffisant pour le produit : {$product->name}. " .
+                            "Stock disponible : {$product->stock_quantity}. " .
+                            "Quantité demandée : {$quantity}.",
                     ]);
                 }
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | Create order
+            |--------------------------------------------------------------------------
+            */
+
             $order = Order::create([
                 'client_id' => $validated['client_id'],
-                'order_number' => 'CMD-' . now()->format('Ymd-His') . '-' . strtoupper(Str::random(4)),
+
+                'order_number' =>
+                    'CMD-' .
+                    now()->format('Ymd-His') .
+                    '-' .
+                    strtoupper(Str::random(4)),
+
                 'source' => $validated['source'],
                 'status' => $validated['status'],
                 'subtotal' => 0,
@@ -150,11 +191,16 @@ class OrderController extends Controller
                 'total_amount' => 0,
             ]);
 
-            foreach ($validated['products'] as $item) {
+            /*
+            |--------------------------------------------------------------------------
+            | Create order items
+            |--------------------------------------------------------------------------
+            */
 
-                $product = Product::findOrFail($item['product_id']);
+            foreach ($products as $productId => $quantity) {
 
-                $quantity = (int) $item['quantity'];
+                $product = Product::findOrFail($productId);
+
                 $price = $product->price;
 
                 $itemSubtotal = $price * $quantity;
@@ -167,11 +213,28 @@ class OrderController extends Controller
                 ]);
 
                 $subtotal += $itemSubtotal;
+            }
 
-                if ($validated['status'] === 'Livrée') {
-                    $product->decrement('stock_quantity', $quantity);
+            /*
+            |--------------------------------------------------------------------------
+            | Decrement stock only if Livrée
+            |--------------------------------------------------------------------------
+            */
+
+            if ($validated['status'] === 'Livrée') {
+
+                foreach ($products as $productId => $quantity) {
+
+                    Product::findOrFail($productId)
+                        ->decrement('stock_quantity', $quantity);
                 }
             }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update totals
+            |--------------------------------------------------------------------------
+            */
 
             $shippingCost = (float) $validated['shipping_cost'];
 
@@ -185,6 +248,7 @@ class OrderController extends Controller
         return to_route('orders.index')
             ->with('success', 'La commande a été créée avec succès.');
     }
+
     /**
      * Display the specified resource.
      */
@@ -210,6 +274,9 @@ class OrderController extends Controller
         ));
     }
 
+    /**
+     * Update order status.
+     */
     public function updateStatus(Request $request, Order $order)
     {
         $validated = $request->validate([
@@ -230,37 +297,72 @@ class OrderController extends Controller
             ]);
         }
 
-        DB::transaction(function () use ($order, $oldStatus, $newStatus) {
+        DB::transaction(function () use (
+            $order,
+            $oldStatus,
+            $newStatus
+        ) {
 
             $order->load('items.product');
 
-            // Order devient Livrée → diminuer le stock
+            /*
+            |--------------------------------------------------------------------------
+            | Any status → Livrée
+            |--------------------------------------------------------------------------
+            |
+            | Check ALL products first.
+            |
+            */
+
             if (
                 $oldStatus !== 'Livrée' &&
                 $newStatus === 'Livrée'
             ) {
+
                 foreach ($order->items as $item) {
 
                     $product = $item->product;
 
                     if ($item->quantity > $product->stock_quantity) {
+
                         throw \Illuminate\Validation\ValidationException::withMessages([
-                            'status' => "Stock insuffisant pour le produit : {$product->name}.",
+                            'status' =>
+                                "Stock insuffisant pour le produit : {$product->name}. " .
+                                "Stock disponible : {$product->stock_quantity}. " .
+                                "Quantité demandée : {$item->quantity}.",
                         ]);
                     }
+                }
 
-                    $product->decrement(
+                /*
+                |--------------------------------------------------------------------------
+                | Decrement only after ALL checks passed
+                |--------------------------------------------------------------------------
+                */
+
+                foreach ($order->items as $item) {
+
+                    $item->product->decrement(
                         'stock_quantity',
                         $item->quantity
                     );
                 }
             }
 
-            // Order quitte Livrée vers Retournée → restaurer le stock
+            /*
+            |--------------------------------------------------------------------------
+            | Livrée → Any other status
+            |--------------------------------------------------------------------------
+            |
+            | Restore stock.
+            |
+            */
+
             if (
                 $oldStatus === 'Livrée' &&
-                $newStatus === 'Retournée'
+                $newStatus !== 'Livrée'
             ) {
+
                 foreach ($order->items as $item) {
 
                     $item->product->increment(
@@ -269,6 +371,12 @@ class OrderController extends Controller
                     );
                 }
             }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update status
+            |--------------------------------------------------------------------------
+            */
 
             $order->update([
                 'status' => $newStatus,
@@ -293,6 +401,7 @@ class OrderController extends Controller
         ]);
 
         $clients = Client::orderBy('name')->get();
+
         $products = Product::orderBy('name')->get();
 
         return view('orders.edit', compact(
@@ -344,82 +453,102 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($validated, $order) {
 
-            $subtotal = 0;
+            /*
+            |--------------------------------------------------------------------------
+            | Old items
+            |--------------------------------------------------------------------------
+            */
+
+            $oldItems = $order->items()
+                ->get()
+                ->groupBy('product_id')
+                ->map(function ($items) {
+                    return $items->sum('quantity');
+                });
 
             /*
-        |--------------------------------------------------------------------------
-        | Stock adjustment
-        |--------------------------------------------------------------------------
-        */
+            |--------------------------------------------------------------------------
+            | New items
+            |--------------------------------------------------------------------------
+            */
+
+            $newItems = collect($validated['products'])
+                ->groupBy('product_id')
+                ->map(function ($items) {
+                    return $items->sum('quantity');
+                });
+
+            /*
+            |--------------------------------------------------------------------------
+            | IMPORTANT
+            |--------------------------------------------------------------------------
+            |
+            | If old status was Livrée and we change anything:
+            |
+            | First restore the OLD stock.
+            |
+            | Example:
+            |
+            | Old:
+            | Product A = 3
+            | Status = Livrée
+            |
+            | Stock already contains -3.
+            |
+            | If we change quantity to 5:
+            |
+            | Restore 3 first.
+            | Then check the new quantity.
+            |
+            */
 
             if ($order->status === 'Livrée') {
 
-                $oldItems = $order->items()
-                    ->get()
-                    ->keyBy('product_id');
+                foreach ($oldItems as $productId => $oldQuantity) {
 
-                $newItems = collect($validated['products'])
-                    ->groupBy('product_id')
-                    ->map(function ($items) {
-                        return $items->sum('quantity');
-                    });
-
-                // Products الموجودة قبل وما بقاتش في order
-                foreach ($oldItems as $productId => $oldItem) {
-
-                    $newQuantity = $newItems->get($productId, 0);
-
-                    $difference = $newQuantity - $oldItem->quantity;
-
-                    if ($difference > 0) {
-
-                        $product = Product::findOrFail($productId);
-
-                        if ($difference > $product->stock_quantity) {
-                            throw \Illuminate\Validation\ValidationException::withMessages([
-                                'products' => "Stock insuffisant pour le produit : {$product->name}.",
-                            ]);
-                        }
-
-                        $product->decrement(
+                    Product::findOrFail($productId)
+                        ->increment(
                             'stock_quantity',
-                            $difference
+                            $oldQuantity
                         );
-                    } elseif ($difference < 0) {
-
-                        Product::findOrFail($productId)->increment(
-                            'stock_quantity',
-                            abs($difference)
-                        );
-                    }
-                }
-
-                // Products جديدة ما كانتش في order
-                foreach ($newItems as $productId => $newQuantity) {
-
-                    if (!$oldItems->has($productId)) {
-
-                        $product = Product::findOrFail($productId);
-
-                        if ($newQuantity > $product->stock_quantity) {
-                            throw \Illuminate\Validation\ValidationException::withMessages([
-                                'products' => "Stock insuffisant pour le produit : {$product->name}.",
-                            ]);
-                        }
-
-                        $product->decrement(
-                            'stock_quantity',
-                            $newQuantity
-                        );
-                    }
                 }
             }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Update order
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | Check NEW stock
+            |--------------------------------------------------------------------------
+            |
+            | At this point:
+            |
+            | - If old status was Livrée:
+            |   old quantity has already been restored.
+            |
+            | - If old status wasn't Livrée:
+            |   stock is unchanged.
+            |
+            */
+
+            foreach ($newItems as $productId => $quantity) {
+
+                $product = Product::findOrFail($productId);
+
+                if ($quantity > $product->stock_quantity) {
+
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'products' =>
+                            "Stock insuffisant pour le produit : {$product->name}. " .
+                            "Stock disponible : {$product->stock_quantity}. " .
+                            "Quantité demandée : {$quantity}.",
+                    ]);
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update order information
+            |--------------------------------------------------------------------------
+            */
 
             $order->update([
                 'client_id' => $validated['client_id'],
@@ -428,18 +557,19 @@ class OrderController extends Controller
             ]);
 
             /*
-        |--------------------------------------------------------------------------
-        | Replace order items
-        |--------------------------------------------------------------------------
-        */
+            |--------------------------------------------------------------------------
+            | Replace order items
+            |--------------------------------------------------------------------------
+            */
 
             $order->items()->delete();
 
-            foreach ($validated['products'] as $item) {
+            $subtotal = 0;
 
-                $product = Product::findOrFail($item['product_id']);
+            foreach ($newItems as $productId => $quantity) {
 
-                $quantity = (int) $item['quantity'];
+                $product = Product::findOrFail($productId);
+
                 $price = $product->price;
 
                 $itemSubtotal = $price * $quantity;
@@ -455,13 +585,33 @@ class OrderController extends Controller
             }
 
             /*
-        |--------------------------------------------------------------------------
-        | Update totals
-        |--------------------------------------------------------------------------
-        */
+            |--------------------------------------------------------------------------
+            | New status is Livrée
+            |--------------------------------------------------------------------------
+            |
+            | Decrement NEW quantities.
+            |
+            */
 
-            $shippingCost = (float) $validated['shipping_cost']; 
-            
+            if ($order->status === 'Livrée') {
+
+                foreach ($newItems as $productId => $quantity) {
+
+                    Product::findOrFail($productId)
+                        ->decrement(
+                            'stock_quantity',
+                            $quantity
+                        );
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update totals
+            |--------------------------------------------------------------------------
+            */
+
+            $shippingCost = (float) $validated['shipping_cost'];
 
             $order->update([
                 'subtotal' => $subtotal,
@@ -479,7 +629,30 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        $order->delete();
+        /*
+        |--------------------------------------------------------------------------
+        | If a delivered order is deleted,
+        | restore its stock first.
+        |--------------------------------------------------------------------------
+        */
+
+        DB::transaction(function () use ($order) {
+
+            if ($order->status === 'Livrée') {
+
+                $order->load('items.product');
+
+                foreach ($order->items as $item) {
+
+                    $item->product->increment(
+                        'stock_quantity',
+                        $item->quantity
+                    );
+                }
+            }
+
+            $order->delete();
+        });
 
         return to_route('orders.index')
             ->with('success', 'La commande a été supprimée avec succès.');

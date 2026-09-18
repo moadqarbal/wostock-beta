@@ -120,6 +120,12 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
+                    <!-- BOUTON Modifier -->
+                    <a href="{{ route('orders.edit', $order) }}"
+                        class="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 transition-all"
+                        title="Modifier">
+                        <i data-lucide="pencil" class="w-5 h-5"></i>
+                    </a>
                     <!-- BOUTON IMPRIMER -->
                     <button onclick="window.print()"
                         class="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 transition-all"
@@ -409,23 +415,58 @@
                     popup: 'rounded-3xl'
                 }
             }).then((result) => {
+
                 if (!result.isConfirmed) {
                     return;
                 }
+
                 fetch('{{ route('orders.update-status', $order) }}', {
                         method: 'PATCH',
+
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
+
                         body: JSON.stringify({
                             status: result.value
                         })
                     })
-                    .then(response => response.json())
+
+                    .then(async response => {
+
+                        const data = await response.json();
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Validation error / Stock insuffisant
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (!response.ok) {
+
+                            let message = 'Une erreur est survenue.';
+
+                            if (data.errors) {
+
+                                const errors = Object.values(data.errors).flat();
+
+                                if (errors.length > 0) {
+                                    message = errors[0];
+                                }
+                            }
+
+                            throw new Error(message);
+                        }
+
+                        return data;
+                    })
+
                     .then(data => {
+
                         if (data.success) {
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Statut mis à jour',
@@ -439,16 +480,19 @@
                             });
                         }
                     })
-                    .catch(() => {
+
+                    .catch(error => {
+
                         Swal.fire({
                             icon: 'error',
-                            title: 'Erreur',
-                            text: 'Impossible de mettre à jour le statut.',
-                            confirmButtonColor: '#4f46e5',
+                            title: 'Stock insuffisant',
+                            text: error.message,
+                            confirmButtonColor: '#dc2626',
                             customClass: {
                                 popup: 'rounded-3xl'
                             }
                         });
+
                     });
             });
         }

@@ -31,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
         |--------------------------------------------------------------------------
         */
 
-        $middleware->appendToGroup('web', RedirectToInstaller::class);
+        $middleware->prepend(RedirectToInstaller::class);
 
         /*
         |--------------------------------------------------------------------------

@@ -15,7 +15,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
-
 use Illuminate\Support\Facades\Route;
 
 
@@ -37,15 +36,15 @@ Route::post('/reset-password', [PasswordController::class, 'update'])->name('pas
 
 
 // Dashboard
-Route::get('/', function () {
+/*Route::get('/', function () {
     if (!file_exists(storage_path('framework/installed'))) {
         return redirect()->route('installer.requirements');
     }
 
     return app(DashboardController::class)->index(request());
-})->name('dashboard.index');
+})->name('dashboard.index');*/
 
-//Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index')->middleware('auth');
+Route::get('/' , [DashboardController::class , 'index'])->name('dashboard.index')->middleware('auth');
 Route::get('/analytics' , [DashboardController::class , 'analytics'])->name('dashboard.analytics')->middleware('auth');
 Route::get('/dashboard/help', [DashboardController::class, 'help'])->name('dashboard.help')->middleware('auth');
 Route::get('/dashboard/propose-feature', [DashboardController::class, 'proposeFeature'])->name('dashboard.propose-feature')->middleware('auth');
