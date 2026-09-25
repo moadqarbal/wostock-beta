@@ -6,7 +6,6 @@
         <x-navigation.topbar />
 
         <!-- PAGE CONTENT -->
-        <!-- PAGE CONTENT -->
         <main class="p-4 lg:p-8 flex-grow w-full">
 
             <!-- En-tête -->
@@ -67,7 +66,24 @@
                                     @enderror
                                 </div>
 
+                                <div class="md:col-span-2">
+                                    <label
+                                        class="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">
+                                        Nom de l'application
+                                    </label>
+
+                                    <input type="text" name="app_name"
+                                        value="{{ old('app_name', $dashboard?->app_name) }}" placeholder="Ex: WoStock"
+                                        class="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/50 text-lg font-bold text-slate-800">
+
+                                    @error('app_name')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                             </div>
+
+
 
                             <button type="submit"
                                 class="mt-8 px-8 py-3 rounded-2xl bg-indigo-600 text-white font-black text-xs uppercase tracking-widest hover:bg-indigo-700 shadow-xl shadow-indigo-200 transition-all">
@@ -256,7 +272,8 @@
                                     </p>
                                 </div>
 
-                                <div class="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-2xl text-center">
+                                <div
+                                    class="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-2xl text-center">
                                     <h4 class="text-emerald-400 font-black text-sm uppercase mb-1">
                                         استشارة مجانية (15 دقيقة)
                                     </h4>

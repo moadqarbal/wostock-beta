@@ -318,14 +318,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if ($product->image) {
-            $imagePath = public_path('uploads/' . $product->image);
-
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
-            }
-        }
-
         $product->delete();
 
         return to_route('products.index')
@@ -352,9 +344,27 @@ class ProductController extends Controller
             ->with('success', 'Le produit a été restauré avec succès.');
     }
 
+
+
     public function forceDelete($id)
     {
         $product = Product::onlyTrashed()->findOrFail($id);
+
+        if ($product->orderItems()->exists()) {
+            return to_route('products.trashed')
+                ->with(
+                    'error',
+                    'Impossible de supprimer définitivement ce produit car il est utilisé dans une ou plusieurs commandes.'
+                );
+        }
+
+        if ($product->image) {
+            $imagePath = public_path('uploads/' . $product->image);
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
 
         $product->forceDelete();
 

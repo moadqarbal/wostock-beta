@@ -325,6 +325,9 @@
 
             <div class="receipt-header">
                 <h1 class="receipt-brand">WoStock beta</h1>
+                <h2 style="font-size: 13pt; font-weight: 900; margin: 2px 0;">
+                    {{ $dashboard?->app_name }}
+                </h2>
                 <p style="font-size: 9pt; margin-top: 2px;">
                     GESTION D'INVENTAIRE
                 </p>

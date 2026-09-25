@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Dashboard;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -162,7 +163,11 @@ class OrderController extends Controller
                 if ($quantity > $product->stock_quantity) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
                         'products' =>
+<<<<<<< HEAD
                             "Stock insuffisant pour le produit : {$product->name}. " .
+=======
+                        "Stock insuffisant pour le produit : {$product->name}. " .
+>>>>>>> 22a6ca1 (fix: improve product management, supplier search, lightbox, help , print branding and force-delete protection)
                             "Stock disponible : {$product->stock_quantity}. " .
                             "Quantité demandée : {$quantity}.",
                     ]);
@@ -179,7 +184,11 @@ class OrderController extends Controller
                 'client_id' => $validated['client_id'],
 
                 'order_number' =>
+<<<<<<< HEAD
                     'CMD-' .
+=======
+                'CMD-' .
+>>>>>>> 22a6ca1 (fix: improve product management, supplier search, lightbox, help , print branding and force-delete protection)
                     now()->format('Ymd-His') .
                     '-' .
                     strtoupper(Str::random(4)),
@@ -268,9 +277,12 @@ class OrderController extends Controller
             'Retournée',
         ];
 
+        $dashboard = Dashboard::first();
+
         return view('orders.show', compact(
             'order',
-            'statuses'
+            'statuses',
+            'dashboard'
         ));
     }
 
@@ -327,7 +339,11 @@ class OrderController extends Controller
 
                         throw \Illuminate\Validation\ValidationException::withMessages([
                             'status' =>
+<<<<<<< HEAD
                                 "Stock insuffisant pour le produit : {$product->name}. " .
+=======
+                            "Stock insuffisant pour le produit : {$product->name}. " .
+>>>>>>> 22a6ca1 (fix: improve product management, supplier search, lightbox, help , print branding and force-delete protection)
                                 "Stock disponible : {$product->stock_quantity}. " .
                                 "Quantité demandée : {$item->quantity}.",
                         ]);
@@ -537,7 +553,11 @@ class OrderController extends Controller
 
                     throw \Illuminate\Validation\ValidationException::withMessages([
                         'products' =>
+<<<<<<< HEAD
                             "Stock insuffisant pour le produit : {$product->name}. " .
+=======
+                        "Stock insuffisant pour le produit : {$product->name}. " .
+>>>>>>> 22a6ca1 (fix: improve product management, supplier search, lightbox, help , print branding and force-delete protection)
                             "Stock disponible : {$product->stock_quantity}. " .
                             "Quantité demandée : {$quantity}.",
                     ]);

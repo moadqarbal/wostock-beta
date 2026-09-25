@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dashboard;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -44,40 +45,50 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        return view('dashboard.edit');
+        $dashboard = Dashboard::first();
+
+        return view('dashboard.edit', compact('dashboard'));
     }
 
     /**
      * Update authenticated user's profile.
      */
     public function updateProfile(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-            ],
+{
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
 
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                'unique:users,email,' . $request->user()->id,
-            ],
+        'email' => [
+            'required',
+            'string',
+            'email',
+            'max:255',
+            'unique:users,email,' . $request->user()->id,
+        ],
+
+        'app_name' => ['required', 'string', 'max:255'],
+    ]);
+
+    $request->user()->update([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+    ]);
+
+    $dashboard = Dashboard::first();
+
+    if ($dashboard) {
+        $dashboard->update([
+            'app_name' => $validated['app_name'],
         ]);
-
-        $user = $request->user();
-
-        $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
+    } else {
+        Dashboard::create([
+            'app_name' => $validated['app_name'],
         ]);
-
-        return to_route('dashboard.edit')
-            ->with('success', 'Votre profil a été mis à jour avec succès.');
     }
+
+    return to_route('dashboard.edit')
+        ->with('success', 'Votre profil a été mis à jour avec succès.');
+}
 
     /**
      * Update authenticated user's password.
@@ -105,7 +116,7 @@ class ProfileController extends Controller
             ->with('success', 'Votre mot de passe a été mis à jour avec succès.');
     }
 
-    
+
 
     /**
      * Update the specified resource in storage.

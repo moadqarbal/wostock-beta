@@ -3,6 +3,7 @@
 <x-ui.success />
 <x-ui.error />
 
+<x-ui.help-widget />
 
 <script>
     // 1. Initialisation globale des icônes au chargement

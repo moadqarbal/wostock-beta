@@ -68,10 +68,10 @@ class UserController extends Controller
                 ->with('success', 'Salut!');
         }
 
-        // تسجيل المحاولة الفاشلة
+        // register failed attempts
         RateLimiter::hit($key, 60 * 60 * 24 * 3);
 
-        // حساب المحاولات المتبقية
+        // remaining atempts
         $remaining = max(0, 20 - RateLimiter::attempts($key));
 
         return back()

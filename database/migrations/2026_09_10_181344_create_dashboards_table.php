@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('dashboards', function (Blueprint $table) {
             $table->id();
+            $table->string('app_name')->nullable();
             $table->timestamps();
         });
     }

@@ -44,7 +44,7 @@
                         Retour
                     </a>
                     <a
-                        href="{{-- route('suppliers.edit', $supplier) --}}"
+                        href="{{ route('suppliers.edit', $supplier) }}"
                         class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 transition flex items-center gap-2 shadow-lg shadow-indigo-600/20"
                     >
                         <i data-lucide="pencil" class="w-4 h-4"></i>

@@ -9,4 +9,8 @@ class Dashboard extends Model
 {
     /** @use HasFactory<\Database\Factories\DashboardFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'app_name'
+    ];
 }

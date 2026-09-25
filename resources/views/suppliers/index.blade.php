@@ -79,9 +79,9 @@
                                                 <p class="font-semibold text-slate-800">
                                                     {{ $supplier->company_name }}
                                                 </p>
-                                                @if ($supplier->country)
+                                                @if ($supplier->city)
                                                     <p class="text-xs text-slate-400 mt-0.5">
-                                                        {{ $supplier->country }}
+                                                        {{ $supplier->city }}
                                                     </p>
                                                 @endif
                                             </div>
