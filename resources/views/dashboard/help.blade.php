@@ -24,7 +24,7 @@
                         </p>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                        <a href="https://api.whatsapp.com/send?phone=212605218908&text=Issue%20WoStock%20:%20"
+                        <a href="https://api.whatsapp.com/send?phone=212617427555&text=Issue%20WoStock%20:%20"
                             class="flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-200">
                             <i data-lucide="message-circle" class="w-4 h-4"></i>
                             Signaler via WhatsApp
@@ -111,7 +111,7 @@
                                 <p class="text-lg italic text-slate-400 text-center md:text-left" dir="rtl">
                                     “الشغف هو اللي كيصنع البزنس، ولكن البزنس ما يقدرش يصنع الشغف”
                                 </p>
-                                <a href="https://api.whatsapp.com/send?phone=212605218908&text=Hello%20Moad,%20je%20souhaite%20une%20consultation%20gratuite"
+                                <a href="https://api.whatsapp.com/send?phone=212617427555&text=Hello%20Moad,%20je%20souhaite%20une%20consultation%20gratuite"
                                     class="px-10 py-5 bg-emerald-500 text-white rounded-[1.5rem] font-black text-sm uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-sm shadow-emerald-500/20 active:scale-95 whitespace-nowrap">
                                     ابدأ الآن
                                 </a>

@@ -33,7 +33,7 @@
                         Modifier
                     </a>
                     <a
-                        href=""
+                        href="{{ route('orders.create') }}"
                         class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 flex items-center gap-2"
                     >
                         <i data-lucide="plus" class="w-4 h-4"></i>

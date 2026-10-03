@@ -42,7 +42,7 @@
                     </p>
 
                     <a
-                        href="https://api.whatsapp.com/send?phone=212605218908&text=Hello%20Moad,%20j'ai%20une%20suggestion%20pour%20la%20prochaine%20version%20de%20WoStock%20:"
+                        href="https://api.whatsapp.com/send?phone=212617427555&text=Hello%20Moad,%20j'ai%20une%20suggestion%20pour%20la%20prochaine%20version%20de%20WoStock%20:"
                         target="_blank"
                         class="flex items-center justify-center gap-3 w-full py-4 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
 

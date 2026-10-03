@@ -4,15 +4,18 @@
     <!-- Logo -->
     <div class="flex items-center justify-between h-20 px-6 bg-slate-950">
 
-        <span class="text-2xl font-black tracking-tighter flex items-center gap-2">
-            <i data-lucide="package" class="text-indigo-500"></i>
+        <a href="{{ route('dashboard.index') }}">
+            <span class="text-2xl font-black tracking-tighter flex items-center gap-2">
+                <i data-lucide="package" class="text-indigo-500"></i>
 
-            WoStock
+                WoStock
 
-            <span class="text-xs font-medium bg-indigo-600 px-1.5 py-0.5 rounded text-white ml-1 uppercase">
-                beta
+                <span class="text-xs font-medium bg-indigo-600 px-1.5 py-0.5 rounded text-white ml-1 uppercase">
+                    beta
+                </span>
             </span>
-        </span>
+        </a>
+
 
         <button onclick="toggleSidebar()" class="lg:hidden">
             <i data-lucide="x" class="w-6 h-6"></i>
@@ -62,8 +65,7 @@
 
         <div class="space-y-1">
 
-            <button
-                onclick="toggleSubmenu('menu-clients', 'icon-clients')"
+            <button onclick="toggleSubmenu('menu-clients', 'icon-clients')"
                 class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
                 {{ request()->routeIs('clients.*')
                     ? 'bg-slate-800 text-white'
@@ -79,9 +81,7 @@
 
                 </div>
 
-                <i data-lucide="chevron-down"
-                    id="icon-clients"
-                    class="w-4 h-4 rotate-icon">
+                <i data-lucide="chevron-down" id="icon-clients" class="w-4 h-4 rotate-icon">
                 </i>
 
             </button>
@@ -121,8 +121,7 @@
 
         <div class="space-y-1">
 
-            <button
-                onclick="toggleSubmenu('menu-fourn', 'icon-fourn')"
+            <button onclick="toggleSubmenu('menu-fourn', 'icon-fourn')"
                 class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
                 {{ request()->routeIs('suppliers.*')
                     ? 'bg-slate-800 text-white'
@@ -138,9 +137,7 @@
 
                 </div>
 
-                <i data-lucide="chevron-down"
-                    id="icon-fourn"
-                    class="w-4 h-4 rotate-icon">
+                <i data-lucide="chevron-down" id="icon-fourn" class="w-4 h-4 rotate-icon">
                 </i>
 
             </button>
@@ -181,8 +178,7 @@
 
         <div class="space-y-1">
 
-            <button
-                onclick="toggleSubmenu('menu-produits', 'icon-produits')"
+            <button onclick="toggleSubmenu('menu-produits', 'icon-produits')"
                 class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
                 {{ request()->routeIs('products.*', 'categories.*')
                     ? 'bg-slate-800 text-white'
@@ -198,9 +194,7 @@
 
                 </div>
 
-                <i data-lucide="chevron-down"
-                    id="icon-produits"
-                    class="w-4 h-4 rotate-icon">
+                <i data-lucide="chevron-down" id="icon-produits" class="w-4 h-4 rotate-icon">
                 </i>
 
             </button>
@@ -252,8 +246,7 @@
 
         <div class="space-y-1">
 
-            <button
-                onclick="toggleSubmenu('menu-commandes', 'icon-commandes')"
+            <button onclick="toggleSubmenu('menu-commandes', 'icon-commandes')"
                 class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all
                 {{ request()->routeIs('orders.*')
                     ? 'bg-slate-800 text-white'
@@ -269,9 +262,7 @@
 
                 </div>
 
-                <i data-lucide="chevron-down"
-                    id="icon-commandes"
-                    class="w-4 h-4 rotate-icon">
+                <i data-lucide="chevron-down" id="icon-commandes" class="w-4 h-4 rotate-icon">
                 </i>
 
             </button>
